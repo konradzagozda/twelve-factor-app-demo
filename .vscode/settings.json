@@ -22,7 +22,7 @@
   "python.analysis.packageIndexDepths": [
     {
       "name": "django",
-      "depth": 2
-    },
+      "depth": 4
+    }
   ]
 }
