@@ -33,7 +33,7 @@ def partial_update_todo(request: HttpRequest, todo_id: int, data: TodoPatch) -> 
     return todo
 
 
-@router.delete("/{todo_id}")
+@router.delete("/{todo_id}", response={204: None})
 def delete_todo(request: HttpRequest, todo_id: int) -> tuple[int, None]:
     Todo.objects.filter(id=todo_id).delete()
     return 204, None
