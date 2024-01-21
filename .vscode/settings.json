@@ -18,5 +18,11 @@
   "black-formatter.args": [
     "--config",
     "${workspaceFolder}/backend/pyproject.toml"
+  ],
+  "python.analysis.packageIndexDepths": [
+    {
+      "name": "django",
+      "depth": 2
+    },
   ]
 }
