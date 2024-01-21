@@ -1,0 +1,22 @@
+{
+  // backend
+  "flake8.importStrategy": "fromEnvironment",
+  "flake8.cwd": "${workspaceFolder}/backend",
+  "mypy-type-checker.importStrategy": "fromEnvironment",
+  "mypy-type-checker.cwd": "${workspaceFolder}/backend",
+  "isort.importStrategy": "fromEnvironment",
+  "isort.check": true,
+  "isort.args": [
+    "--settings-path",
+    "${workspaceFolder}/backend/pyproject.toml"
+  ],
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.formatOnSave": true
+  },
+  "black-formatter.importStrategy": "fromEnvironment",
+  "black-formatter.args": [
+    "--config",
+    "${workspaceFolder}/backend/pyproject.toml"
+  ]
+}
