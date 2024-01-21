@@ -2,7 +2,7 @@ from django.db.models import QuerySet
 from django.http import HttpRequest
 from ninja import Router
 
-from config.schemas import ErrorSchema
+from config.schemas import Error
 from todos.errors import TODO_NOT_FOUND
 from todos.models import Todo
 from todos.schemas import TodoAll, TodoCreate, TodoPatch
@@ -20,19 +20,24 @@ def list_todos(request: HttpRequest) -> tuple[int, QuerySet[Todo]]:
     return 200, Todo.objects.all()
 
 
-@router.get("/{todo_id}", response={200: TodoAll, 404: ErrorSchema})
-def get_todo(request: HttpRequest, todo_id: int) -> tuple[int, Todo | ErrorSchema]:
+@router.get("/{todo_id}", response={200: TodoAll, 404: Error})
+def get_todo(request: HttpRequest, todo_id: int) -> tuple[int, Todo | Error]:
     try:
         return 200, Todo.objects.get(id=todo_id)
     except Todo.DoesNotExist:
-        return 404, ErrorSchema(
+        return 404, Error(
             type=TODO_NOT_FOUND.type, title=TODO_NOT_FOUND.title, detail=TODO_NOT_FOUND.detail.format(todo_id)
         )
 
 
-@router.patch("/{todo_id}", response={200: TodoAll})
-def partial_update_todo(request: HttpRequest, todo_id: int, data: TodoPatch) -> Todo:
-    todo = Todo.objects.get(id=todo_id)
+@router.patch("/{todo_id}", response={200: TodoAll, 404: Error})
+def partial_update_todo(request: HttpRequest, todo_id: int, data: TodoPatch) -> tuple[int, Todo | Error]:
+    try:
+        todo = Todo.objects.get(id=todo_id)
+    except Todo.DoesNotExist:
+        return 404, Error(
+            type=TODO_NOT_FOUND.type, title=TODO_NOT_FOUND.title, detail=TODO_NOT_FOUND.detail.format(todo_id)
+        )
 
     if data.title is not None:
         todo.title = data.title
@@ -42,7 +47,7 @@ def partial_update_todo(request: HttpRequest, todo_id: int, data: TodoPatch) -> 
         todo.completed = data.completed
 
     todo.save()
-    return todo
+    return 200, todo
 
 
 @router.delete("/{todo_id}", response={204: None})
