@@ -26,17 +26,23 @@ def get_todo(request: HttpRequest, todo_id: int) -> tuple[int, Todo | Error]:
         return 200, Todo.objects.get(id=todo_id)
     except Todo.DoesNotExist:
         return 404, Error(
-            type=TODO_NOT_FOUND.type, title=TODO_NOT_FOUND.title, detail=TODO_NOT_FOUND.detail.format(todo_id)
+            type=TODO_NOT_FOUND.type,
+            title=TODO_NOT_FOUND.title,
+            detail=TODO_NOT_FOUND.detail.format(todo_id),
         )
 
 
 @router.patch("/{todo_id}", response={200: TodoAll, 404: Error})
-def partial_update_todo(request: HttpRequest, todo_id: int, data: TodoPatch) -> tuple[int, Todo | Error]:
+def partial_update_todo(
+    request: HttpRequest, todo_id: int, data: TodoPatch
+) -> tuple[int, Todo | Error]:
     try:
         todo = Todo.objects.get(id=todo_id)
     except Todo.DoesNotExist:
         return 404, Error(
-            type=TODO_NOT_FOUND.type, title=TODO_NOT_FOUND.title, detail=TODO_NOT_FOUND.detail.format(todo_id)
+            type=TODO_NOT_FOUND.type,
+            title=TODO_NOT_FOUND.title,
+            detail=TODO_NOT_FOUND.detail.format(todo_id),
         )
 
     if data.title is not None:
