@@ -10,7 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
+
+from config.exceptions import MissingConfiguration
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,10 +25,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-l(7dip%l0*^nw!z2n&at@15u=4t=&ng)tlbm4xwr8-(-5!_j@k"
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS: list[str] = []
+try:
+    DEBUG = os.environ["DEBUG"] == "True"
+    ALLOWED_HOSTS = os.environ["ALLOWED_HOSTS"].split(",")
+except KeyError as exc:
+    raise MissingConfiguration(f"The {exc} environment variable is required.")
 
 
 # Application definition

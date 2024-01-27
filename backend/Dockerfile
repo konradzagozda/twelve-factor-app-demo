@@ -15,4 +15,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . ./
 
-ENTRYPOINT ["python", "-m", "uvicorn", "config.asgi:application"]
+ENTRYPOINT ["python", "-m", "uvicorn", "--host", "0.0.0.0", "config.asgi:application"]

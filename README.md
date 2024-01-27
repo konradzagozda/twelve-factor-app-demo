@@ -21,6 +21,12 @@ Set up backend for your IDE:
 1. `cd backend && poetry install && poetry self add poetry-plugin-export && poetry shell`
 2. move to root dir and activate pre-commit: `pre-commit install`
 
+Run the App:
+
+1. `./setup.sh` - it will boot minikube cluster and deploy all the components with reload on change
+
+If you close the terminal after running `./setup.sh` you can expose services once again using `minikube service --all --url -n simple-app` command
+
 ## Tech Stack
 
 - backend: django, django-ninja, pytest, uvicorn
