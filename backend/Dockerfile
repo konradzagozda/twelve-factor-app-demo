@@ -3,8 +3,11 @@ FROM python:3.11-alpine
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
+
 RUN apk update
 
+RUN adduser -D apprunner
+USER apprunner
 WORKDIR /app
 
 COPY requirements.txt ./
