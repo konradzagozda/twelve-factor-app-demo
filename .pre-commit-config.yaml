@@ -26,6 +26,6 @@ repos:
 
       - id: mypy
         name: mypy
-        entry: sh -c 'cd backend && poetry run mypy .'
+        entry: sh -c 'source load-env.sh && cd backend && poetry run mypy .'
         language: system
         pass_filenames: false
