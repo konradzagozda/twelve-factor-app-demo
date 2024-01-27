@@ -21,3 +21,12 @@ spec:
           envFrom:
             - configMapRef:
                 name: backend-config
+          args: ["--reload"]
+          volumeMounts:
+            - name: backend-volume
+              mountPath: /app
+      volumes:
+        - name: backend-volume
+          hostPath:
+            path: /mnt/project/backend
+            type: Directory
