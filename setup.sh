@@ -2,7 +2,6 @@
 set -x
 
 # prepare local cluster
-minikube delete
 minikube start
 nohup minikube mount .:/mnt/project &
 sleep 30 # wait until cluster and mount is ready
@@ -38,6 +37,9 @@ sleep 10
 kubectl apply -f backend-deployment.yaml
 kubectl apply -f backend-service.yaml
 sleep 10
+
+# run migrations
+../../execute.sh python manage.py migrate
 
 # expose services
 echo "Use following IP to acces the app."
