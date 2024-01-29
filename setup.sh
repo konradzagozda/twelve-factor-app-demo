@@ -18,7 +18,7 @@ EOF
 
 
 # create namespace
-cd k8s/local
+cd deployment/local
 kubectl apply -f namespace.yaml
 kubectl config set-context --current --namespace=simple-app
 
