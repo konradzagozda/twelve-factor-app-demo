@@ -21,7 +21,9 @@ spec:
           envFrom:
             - configMapRef:
                 name: backend-config
-          args: ["--reload"]
+            - secretRef:
+                name: backend-secret
+          args: ["--reload"] # local only
           volumeMounts:
             - name: backend-volume
               mountPath: /app

@@ -35,3 +35,4 @@ If you close the terminal after running `./setup.sh` you can expose services onc
 ## Features
 
 - Dockerfiles built with best practice in mind: minimal size, security, single Dockerfile for every environment
+- Distinction between config(configMap) and sensitive config(secrets)

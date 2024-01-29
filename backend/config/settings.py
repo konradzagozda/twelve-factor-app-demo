@@ -28,6 +28,10 @@ SECRET_KEY = "django-insecure-l(7dip%l0*^nw!z2n&at@15u=4t=&ng)tlbm4xwr8-(-5!_j@k
 try:
     DEBUG = os.environ["DEBUG"] == "True"
     ALLOWED_HOSTS = os.environ["ALLOWED_HOSTS"].split(",")
+    DB_NAME = os.environ["DB_NAME"]
+    DB_USER = os.environ["DB_USER"]
+    DB_PASSWORD = os.environ["DB_PASSWORD"]
+    DB_HOST = os.environ["DB_HOST"]
 except KeyError as exc:
     raise MissingConfiguration(f"The {exc} environment variable is required.")
 
@@ -49,8 +53,12 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": DB_NAME,
+        "USER": DB_USER,
+        "PASSWORD": DB_PASSWORD,
+        "HOST": DB_HOST,
+        "PORT": 5432,
     }
 }
 
