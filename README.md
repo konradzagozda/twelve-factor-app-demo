@@ -25,7 +25,7 @@ Run the App:
 
 1. `./setup.sh` - it will boot minikube cluster and deploy all the components with reload on change
 
-If you close the terminal after running `./setup.sh` you can expose services once again using `minikube service --all --url -n simple-app` command
+If you close the terminal after running `./setup.sh` you can expose service once again using `minikube service backend-service --url -n simple-app` command
 
 Use `./execute.sh` to execute commands within the container e.g. `./execute.sh python manage.py migrate`
 
