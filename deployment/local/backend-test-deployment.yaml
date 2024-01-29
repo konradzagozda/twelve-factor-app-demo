@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-test-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-test
+  template:
+    metadata:
+      labels:
+        app: backend-test
+    spec:
+      containers:
+        - name: backend-test-container
+          image: backend-test
+          imagePullPolicy: Never
+          envFrom:
+            - configMapRef:
+                name: backend-config
+            - secretRef:
+                name: backend-secret
+          volumeMounts:
+            - name: backend-test-volume
+              mountPath: /app
+      volumes:
+        - name: backend-test-volume
+          hostPath:
+            path: /mnt/project/backend
+            type: Directory

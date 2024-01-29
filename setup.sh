@@ -12,8 +12,8 @@ cd backend && poetry export -f requirements.txt --output src/requirements.txt &&
 
 # build images in minikube
 minikube ssh << EOF
-cd /mnt/project/backend/src
-docker build -t backend .
+cd /mnt/project/backend/src && docker build -t backend .
+cd /mnt/project/backend && docker build -t backend-test -f Dockerfile.test .
 exit
 EOF
 
@@ -37,6 +37,7 @@ sleep 10
 # create backend
 kubectl apply -f backend-deployment.yaml
 kubectl apply -f backend-service.yaml
+kubectl apply -f backend-test-deployment.yaml
 sleep 10
 
 # run migrations

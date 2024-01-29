@@ -29,6 +29,11 @@ If you close the terminal after running `./setup.sh` you can expose service once
 
 Use `./execute.sh` to execute commands within the container e.g. `./execute.sh python manage.py migrate`
 
+## Tests
+
+Run the tests using `./execute-in-test.container.sh pytest`
+In parallel: `./execute-in-test.container.sh pytest -n 4`
+
 ## Tech Stack
 
 - backend: django-ninja, pytest-django, uvicorn

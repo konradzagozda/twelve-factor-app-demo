@@ -20,7 +20,7 @@ def list_todos(request: HttpRequest) -> tuple[int, QuerySet[Todo]]:
     return 200, Todo.objects.all()
 
 
-@router.get("/{todo_id}", response={200: TodoAll, 404: Error})
+@router.get("/{todo_id}/", response={200: TodoAll, 404: Error})
 def get_todo(request: HttpRequest, todo_id: int) -> tuple[int, Todo | Error]:
     try:
         return 200, Todo.objects.get(id=todo_id)
@@ -32,7 +32,7 @@ def get_todo(request: HttpRequest, todo_id: int) -> tuple[int, Todo | Error]:
         )
 
 
-@router.patch("/{todo_id}", response={200: TodoAll, 404: Error})
+@router.patch("/{todo_id}/", response={200: TodoAll, 404: Error})
 def partial_update_todo(
     request: HttpRequest, todo_id: int, data: TodoPatch
 ) -> tuple[int, Todo | Error]:
@@ -56,7 +56,7 @@ def partial_update_todo(
     return 200, todo
 
 
-@router.delete("/{todo_id}", response={204: None})
+@router.delete("/{todo_id}/", response={204: None})
 def delete_todo(request: HttpRequest, todo_id: int) -> tuple[int, None]:
     Todo.objects.filter(id=todo_id).delete()
     return 204, None
