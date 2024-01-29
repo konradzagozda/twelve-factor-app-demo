@@ -31,7 +31,7 @@ Use `./execute.sh` to execute commands within the container e.g. `./execute.sh p
 
 ## Tech Stack
 
-- backend: django, django-ninja, pytest, uvicorn
+- backend: django-ninja, pytest-django, uvicorn
 - kubernetes for local deployment
 
 ## Features

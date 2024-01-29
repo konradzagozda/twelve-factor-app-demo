@@ -2,6 +2,7 @@
 set -x
 
 # prepare local cluster
+minikube delete
 minikube start
 nohup minikube mount .:/mnt/project &
 sleep 30 # wait until cluster and mount is ready

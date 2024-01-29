@@ -9,7 +9,7 @@ readme = "README.md"
 python = "^3.11"
 django-ninja = "^1.1.0"
 uvicorn = "^0.27.0"
-psycopg2 = "^2.9.9"
+psycopg = "^3.1.17"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -19,6 +19,7 @@ isort = "^5.13.2"
 flake8 = "^7.0.0"
 flake8-django = {git = "https://github.com/rocioar/flake8-django.git"}
 django-stubs = {version = "^4.2.7", extras = ["compatible-mypy"]}
+pytest-django = "^4.7.0"
 
 [build-system]
 requires = ["poetry-core"]
@@ -39,3 +40,6 @@ plugins = ["mypy_django_plugin.main"]
 
 [tool.django-stubs]
 django_settings_module = "config.settings"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings"
