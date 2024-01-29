@@ -26,6 +26,6 @@ repos:
 
       - id: mypy
         name: mypy
-        entry: sh -c 'source load-env.sh && cd backend && poetry run mypy .'
+        entry: sh -c 'source load-env.sh && cd backend/src && poetry run mypy . --config-file=../pyproject.toml'
         language: system
         pass_filenames: false
