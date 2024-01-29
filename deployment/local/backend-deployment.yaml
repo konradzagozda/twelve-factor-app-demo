@@ -27,8 +27,8 @@ spec:
           volumeMounts:
             - name: backend-volume
               mountPath: /app
-      volumes:
+      volumes: # local only
         - name: backend-volume
           hostPath:
-            path: /mnt/project/backend
+            path: /mnt/project/backend/src
             type: Directory

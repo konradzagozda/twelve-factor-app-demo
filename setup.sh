@@ -8,11 +8,11 @@ nohup minikube mount .:/mnt/project &
 sleep 30 # wait until cluster and mount is ready
 
 # prepare backend for build
-cd backend && poetry export -f requirements.txt --output requirements.txt && cd ..
+cd backend && poetry export -f requirements.txt --output src/requirements.txt && cd ..
 
 # build images in minikube
 minikube ssh << EOF
-cd /mnt/project/backend
+cd /mnt/project/backend/src
 docker build -t backend .
 exit
 EOF
