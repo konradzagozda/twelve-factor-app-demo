@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from django.db.models import QuerySet
 from django.http import HttpRequest
 from ninja import Router
@@ -21,20 +23,20 @@ def list_todos(request: HttpRequest) -> tuple[int, QuerySet[Todo]]:
 
 
 @router.get("/{todo_id}/", response={200: TodoAll, 404: Error})
-def get_todo(request: HttpRequest, todo_id: int) -> tuple[int, Todo | Error]:
+def get_todo(request: HttpRequest, todo_id: UUID) -> tuple[int, Todo | Error]:
     try:
         return 200, Todo.objects.get(id=todo_id)
     except Todo.DoesNotExist:
         return 404, Error(
             type=TODO_NOT_FOUND.type,
             title=TODO_NOT_FOUND.title,
-            detail=TODO_NOT_FOUND.detail.format(todo_id),
+            detail=TODO_NOT_FOUND.detail.format(str(todo_id)),
         )
 
 
 @router.patch("/{todo_id}/", response={200: TodoAll, 404: Error})
 def partial_update_todo(
-    request: HttpRequest, todo_id: int, data: TodoPatch
+    request: HttpRequest, todo_id: UUID, data: TodoPatch
 ) -> tuple[int, Todo | Error]:
     try:
         todo = Todo.objects.get(id=todo_id)
@@ -42,7 +44,7 @@ def partial_update_todo(
         return 404, Error(
             type=TODO_NOT_FOUND.type,
             title=TODO_NOT_FOUND.title,
-            detail=TODO_NOT_FOUND.detail.format(todo_id),
+            detail=TODO_NOT_FOUND.detail.format(str(todo_id)),
         )
 
     if data.title is not None:
@@ -57,6 +59,6 @@ def partial_update_todo(
 
 
 @router.delete("/{todo_id}/", response={204: None})
-def delete_todo(request: HttpRequest, todo_id: int) -> tuple[int, None]:
+def delete_todo(request: HttpRequest, todo_id: UUID) -> tuple[int, None]:
     Todo.objects.filter(id=todo_id).delete()
     return 204, None

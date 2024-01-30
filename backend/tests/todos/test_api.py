@@ -23,7 +23,7 @@ def test_create_todo(api_client):
 def test_get_todo(api_client, sample_todo):
     response = api_client.get(f"/api/todos/{sample_todo.id}/")
     assert response.status_code == 200
-    assert response.json()["id"] == sample_todo.id
+    assert response.json()["id"] == str(sample_todo.id)
 
 
 @pytest.mark.django_db

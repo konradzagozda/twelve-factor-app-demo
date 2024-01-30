@@ -1,8 +1,10 @@
+from uuid import UUID
+
 from ninja import Schema
 
 
 class TodoAll(Schema):
-    id: int
+    id: UUID
     title: str
     description: str
     completed: bool
