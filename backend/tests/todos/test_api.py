@@ -1,17 +1,18 @@
+from django.test import Client
 import pytest
 
 from todos.models import Todo
 
 
 @pytest.mark.django_db
-def test_list_todos(api_client, sample_todo):
+def test_list_todos(api_client: Client, sample_todo: Todo) -> None:
     response = api_client.get("/api/todos/")
     assert response.status_code == 200
     assert len(response.json()) == 1
 
 
 @pytest.mark.django_db
-def test_create_todo(api_client):
+def test_create_todo(api_client: Client) -> None:
     response = api_client.post(
         "/api/todos/", {"title": "New Todo", "description": "New Description"}, "application/json"
     )
@@ -20,14 +21,14 @@ def test_create_todo(api_client):
 
 
 @pytest.mark.django_db
-def test_get_todo(api_client, sample_todo):
+def test_get_todo(api_client: Client, sample_todo: Todo) -> None:
     response = api_client.get(f"/api/todos/{sample_todo.id}/")
     assert response.status_code == 200
     assert response.json()["id"] == str(sample_todo.id)
 
 
 @pytest.mark.django_db
-def test_partial_update_todo(api_client, sample_todo):
+def test_partial_update_todo(api_client: Client, sample_todo: Todo) -> None:
     response = api_client.patch(
         f"/api/todos/{sample_todo.id}/", {"title": "Updated Title"}, "application/json"
     )
@@ -37,7 +38,7 @@ def test_partial_update_todo(api_client, sample_todo):
 
 
 @pytest.mark.django_db
-def test_delete_todo(api_client, sample_todo):
+def test_delete_todo(api_client: Client, sample_todo: Todo) -> None:
     response = api_client.delete(f"/api/todos/{sample_todo.id}/")
     assert response.status_code == 204
     assert Todo.objects.count() == 0

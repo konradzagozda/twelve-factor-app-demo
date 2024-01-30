@@ -20,4 +20,5 @@ for env_file in local.env local.secret.env; do
     done < "$env_file"
 done
 
+export PYTHONPATH="$(pwd)/backend/test:$(pwd)/backend/src:${PYTHONPATH}"
 echo "Environment variables loaded successfully"

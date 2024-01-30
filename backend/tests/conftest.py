@@ -3,5 +3,5 @@ import pytest
 
 
 @pytest.fixture
-def api_client():
+def api_client() -> Client:
     return Client()

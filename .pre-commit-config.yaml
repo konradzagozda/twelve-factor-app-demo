@@ -24,8 +24,14 @@ repos:
         language: system
         pass_filenames: false
 
-      - id: mypy
-        name: mypy
+      - id: mypy-src
+        name: mypy-src
         entry: sh -c 'source load-env.sh && cd backend/src && poetry run mypy . --config-file=../pyproject.toml'
+        language: system
+        pass_filenames: false
+
+      - id: mypy-tests
+        name: mypy-tests
+        entry: sh -c 'source load-env.sh && cd backend/tests && poetry run mypy . --config-file=../pyproject.toml'
         language: system
         pass_filenames: false
