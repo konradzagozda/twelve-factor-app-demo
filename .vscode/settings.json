@@ -24,5 +24,6 @@
       "name": "django",
       "depth": 4
     }
-  ]
+  ],
+  "python.envFile": "${workspaceFolder}/.vscode/.env"
 }
