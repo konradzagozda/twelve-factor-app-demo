@@ -4,30 +4,29 @@
 
 Sample modern application created to demonstrate full adherence to `The Twelve-Factor App` methodology.
 
-## Dependencies
-
-Install following dependencies:
-
-- minikube
-- docker
-- python3.11
-- poetry
-- vscode (recommended)
-
 ## Setting Up The Project
 
-Set up backend for your IDE:
+1. Install following dependencies:
 
-1. `cd backend && poetry install && poetry self add poetry-plugin-export && poetry shell`
-2. move to root dir and activate pre-commit: `pre-commit install`
+   - minikube
+   - docker
+   - python3.11
+   - poetry
+   - pyenv
+   - git
+   - ansible
+   - vscode (recommended)
 
-Run the App:
+2. Run automation playbook that will scaffold project for you:
 
-1. `./setup.sh` - it will boot minikube cluster and deploy all the components with reload on change
+   `ansible-playbook setup.yaml`
 
-If you close the terminal after running `./setup.sh` you can expose service once again using `minikube service backend-service --url -n simple-app` command
+3. Activate virtualenv
 
-Use `./execute.sh` to execute commands within the container e.g. `./execute.sh python manage.py migrate`
+   - in your IDE
+   - in your shell: `cd backend && poetry shell`
+
+4. Access backend service using `minikube service backend-service --url -n simple-app`
 
 ## Tests
 
@@ -36,10 +35,18 @@ In parallel: `./execute-in-test.container.sh pytest -n 4`
 
 ## Tech Stack
 
-- backend: django-ninja, pytest-django, uvicorn
-- kubernetes for local deployment
+- backend:
+  - django, django-ninja,
+  - pytest, pytest-django,
+  - uvicorn
+- kubernetes
+- ansible
 
 ## Features
 
 - Dockerfiles built with best practice in mind: minimal size, security, single Dockerfile for every environment
 - Distinction between config(configMap) and sensitive config(secrets)
+
+## XII-Factor Application
+
+- declarative format for setup automation achieved with `ansible`.

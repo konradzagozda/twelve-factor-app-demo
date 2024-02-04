@@ -1,0 +1,153 @@
+- name: Check required dependencies
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Check for required dependencies
+      command: "{{ item.cmd }}"
+      register: result
+      failed_when: result.rc != 0
+      changed_when: false
+      loop:
+        - { cmd: "minikube version", name: "Minikube" }
+        - { cmd: "docker --version", name: "Docker" }
+        - { cmd: "python3.11 --version", name: "Python 3.11" }
+        - { cmd: "poetry --version", name: "Poetry" }
+        - { cmd: "git --version", name: "Git" }
+        - { cmd: "pyenv --version", name: "Pyenv" }
+      loop_control:
+        label: "{{ item.name }}"
+
+- name: Setup backend locally
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Ensure python env with Poetry
+      command: poetry env use 3.11
+      register: poetry_env_output
+      args:
+        chdir: backend
+      changed_when: "'Creating virtualenv' in poetry_env_output.stderr"
+
+    - name: Install dependencies with Poetry
+      command: poetry install
+      args:
+        chdir: backend
+      register: poetry_install_output
+      changed_when: >
+        "No dependencies to install or update" not in poetry_install_output.stdout
+
+    - name: Add poetry-plugin-export
+      command: poetry self add poetry-plugin-export
+      args:
+        chdir: backend
+      register: poetry_plugin_add_output
+      changed_when: >
+        "Nothing to add." not in poetry_plugin_add_output.stdout
+
+    - name: Export requirements.txt from lock
+      shell: |
+        set -o pipefail
+        poetry export -f requirements.txt --output src/requirements.txt.tmp && \
+        if ! cmp --silent src/requirements.txt.tmp src/requirements.txt; then
+          mv src/requirements.txt.tmp src/requirements.txt
+          echo "requirements.txt has changed"
+        else
+          rm src/requirements.txt.tmp
+          echo "No changes in requirements.txt"
+        fi
+      args:
+        chdir: backend
+      register: poetry_export_output
+      changed_when: "'requirements.txt has changed' in poetry_export_output.stdout"
+
+    - name: Activate pre-commit
+      shell: |
+        if [ -f .git/hooks/pre-commit ]; then
+          cp .git/hooks/pre-commit .git/hooks/pre-commit.bak
+        else
+          touch .git/hooks/pre-commit.bak # Ensure backup exists for comparison
+        fi
+
+        poetry -C backend run pre-commit install
+
+        if cmp --silent .git/hooks/pre-commit .git/hooks/pre-commit.bak; then
+          CHANGED="No changes in pre-commit hook"
+          STATUS=0
+        else
+          CHANGED="pre-commit hook has changed"
+          STATUS=1
+        fi
+
+        rm .git/hooks/pre-commit.bak
+
+        # Output result
+        echo $CHANGED
+        exit $STATUS
+      register: pre_commit_install_output
+      changed_when: pre_commit_install_output.rc == 1
+      failed_when: pre_commit_install_output.rc not in [0,1]
+      ignore_errors: false
+
+- name: Create local kubernetes cluster with minikube
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Delete existing Minikube cluster
+      command: minikube delete
+      ignore_errors: yes # In case there's no cluster to delete
+
+    - name: Start Minikube cluster
+      command: minikube start
+
+    - name: Mount local directory to Minikube
+      shell: nohup minikube mount .:/mnt/project &
+
+    - name: Wait for Minikube and mount to be ready
+      pause:
+        seconds: 5
+
+- name: Create kuberenetes resources
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Build Docker images in Minikube
+      shell: |
+        minikube ssh <<EOF
+        docker build -t backend /mnt/project/backend/src
+        docker build -t backend-test -f /mnt/project/backend/Dockerfile.test /mnt/project/backend
+        exit
+        EOF
+
+    - name: Apply namespace configuration
+      k8s:
+        state: present
+        src: deployment/local/namespace.yaml
+
+    - name: Set current namespace context
+      shell: kubectl config set-context --current --namespace=simple-app
+
+    - name: Create ConfigMap from env file
+      shell: kubectl create configmap backend-config --from-env-file=local.env
+
+    - name: Create Secret from env file
+      shell: kubectl create secret generic backend-secret --from-env-file=local.secret.env
+
+    - name: Apply Kubernetes configurations
+      k8s:
+        state: present
+        namespace: simple-app
+        src: "{{ item }}"
+      loop:
+        - deployment/local/database-volume-claim.yaml
+        - deployment/local/database-deployment.yaml
+        - deployment/local/database-service.yaml
+        - deployment/local/backend-deployment.yaml
+        - deployment/local/backend-service.yaml
+        - deployment/local/backend-test-deployment.yaml
+
+    - name: Pause for 10 seconds
+      pause:
+        seconds: 10
+
+    - name: Run migrations
+      shell: ./execute.sh python manage.py migrate
