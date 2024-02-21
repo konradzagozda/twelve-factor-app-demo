@@ -30,7 +30,7 @@ Sample modern application created to demonstrate full adherence to `The Twelve-F
 
 ## Tests
 
-Run the tests using `./execute-in-test.container.sh pytest`
+Run the tests using `./execute-in-test-container.sh pytest`
 In parallel: `./execute-in-test-container.sh pytest -n 4`
 
 ## Tech Stack

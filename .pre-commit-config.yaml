@@ -36,7 +36,7 @@ repos:
 
       - id: mypy-tests
         name: mypy-tests
-        entry: sh -c 'source load-env.sh && cd backend/tests && poetry run mypy . --config-file=../pyproject.toml'
+        entry: sh -c 'source load-env.sh && cd backend/tests && poetry run mypy . --config-file=../pyproject.toml --explicit-package-bases'
         language: system
         require_serial: true
         types_or: [python, pyi]
