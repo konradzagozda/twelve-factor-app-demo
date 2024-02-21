@@ -30,5 +30,5 @@ spec:
       volumes: # local only
         - name: backend-volume
           hostPath:
-            path: /mnt/project/backend/src
+            path: /project/backend/src
             type: Directory

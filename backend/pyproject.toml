@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "simple-app"
+name = "12factor"
 version = "0.1.0"
 description = ""
 authors = ["Konrad Zagozda <konrad.zagozda@grapeup.com>"]

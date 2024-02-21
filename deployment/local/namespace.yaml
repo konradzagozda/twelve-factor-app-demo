@@ -1,6 +1,6 @@
 kind: Namespace
 apiVersion: v1
 metadata:
-  name: simple-app
+  name: 12factor
   labels:
-    name: simple-app
+    name: 12factor

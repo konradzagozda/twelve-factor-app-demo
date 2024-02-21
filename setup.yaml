@@ -8,7 +8,7 @@
       failed_when: result.rc != 0
       changed_when: false
       loop:
-        - { cmd: "minikube version", name: "Minikube" }
+        - { cmd: "kind version", name: "Kind" }
         - { cmd: "docker --version", name: "Docker" }
         - { cmd: "python3.11 --version", name: "Python 3.11" }
         - { cmd: "poetry --version", name: "Poetry" }
@@ -88,35 +88,24 @@
       failed_when: pre_commit_install_output.rc not in [0,1]
       ignore_errors: false
 
-- name: Create local kubernetes cluster with minikube
-  hosts: localhost
-  gather_facts: no
-  tasks:
-    - name: Delete existing Minikube cluster
-      command: minikube delete
-      ignore_errors: yes # In case there's no cluster to delete
-
-    - name: Start Minikube cluster
-      command: minikube start
-
-    - name: Mount local directory to Minikube
-      shell: nohup minikube mount .:/mnt/project &
-
-    - name: Wait for Minikube and mount to be ready
-      pause:
-        seconds: 5
-
 - name: Create kuberenetes resources
   hosts: localhost
   gather_facts: no
   tasks:
-    - name: Build Docker images in Minikube
-      shell: |
-        minikube ssh <<EOF
-        docker build -t backend /mnt/project/backend/src
-        docker build -t backend-test -f /mnt/project/backend/Dockerfile.test /mnt/project/backend
-        exit
-        EOF
+    - name: Start kubernetes cluster using kind
+      shell: sed "s|PWD_PLACEHOLDER|$(pwd)|g" deployment/local/kind-config-template.yaml | kind create cluster --name 12factor --wait 30s --config=-
+
+    - name: Set kubernetes context to kind-12factor cluster context
+      command: kubectl cluster-info --context kind-12factor
+
+    - name: Build docker image
+      command: docker build -t backend backend/src
+
+    - name: Build test docker image
+      command: docker build -t backend-test -f backend/Dockerfile.test backend
+
+    - name: Push docker images to kind
+      command: kind --name 12factor load docker-image backend backend-test
 
     - name: Apply namespace configuration
       k8s:
@@ -124,7 +113,7 @@
         src: deployment/local/namespace.yaml
 
     - name: Set current namespace context
-      shell: kubectl config set-context --current --namespace=simple-app
+      shell: kubectl config set-context --current --namespace=12factor
 
     - name: Create ConfigMap from env file
       shell: kubectl create configmap backend-config --from-env-file=local.env
@@ -135,7 +124,7 @@
     - name: Apply Kubernetes configurations
       k8s:
         state: present
-        namespace: simple-app
+        namespace: 12factor
         src: "{{ item }}"
       loop:
         - deployment/local/database-volume-claim.yaml

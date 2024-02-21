@@ -27,5 +27,5 @@ spec:
       volumes:
         - name: backend-test-volume
           hostPath:
-            path: /mnt/project/backend
+            path: /project/backend
             type: Directory

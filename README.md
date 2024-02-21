@@ -1,4 +1,4 @@
-# simple-app
+# 12factor app demo
 
 ## Description
 
@@ -8,7 +8,7 @@ Sample modern application created to demonstrate full adherence to `The Twelve-F
 
 1. Install following dependencies:
 
-   - minikube
+   - kind
    - docker
    - python3.11
    - poetry
@@ -26,12 +26,12 @@ Sample modern application created to demonstrate full adherence to `The Twelve-F
    - in your IDE
    - in your shell: `cd backend && poetry shell`
 
-4. Access backend service using `minikube service backend-service --url -n simple-app`
+4. Access backend service: `http://localhost:30000`
 
 ## Tests
 
 Run the tests using `./execute-in-test.container.sh pytest`
-In parallel: `./execute-in-test.container.sh pytest -n 4`
+In parallel: `./execute-in-test-container.sh pytest -n 4`
 
 ## Tech Stack
 
