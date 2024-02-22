@@ -4,6 +4,16 @@
 
 Sample modern application created to demonstrate full adherence to `The Twelve-Factor App` methodology.
 
+## XII-Factor Application
+
+- **declarative format for setup automation** - achieved with `ansible`
+- **clean contract with underlying system** - only `unix-like` system is needed, for windows use WSL2.
+- **suitable for deployment on modern cloud platforms** - achieved with `kubernetes`
+- TODO: no dev/prod deployment yet **Minimize divergence** between development and production - local / dev / prod environments differs mostly just by configuration settings
+- TODO: can **scale up** - achieved with `kubernetes` and autoscalling cloud capabilities.
+
+### Codebase - One codebase tracked in revision control, many deploys
+
 ## Setting Up The Project
 
 1. Install following dependencies:
@@ -46,16 +56,6 @@ In parallel: `./execute-in-test-container.sh pytest -n 4`
 
 - Dockerfiles built with best practice in mind: minimal size, security, single Dockerfile for every environment
 - Distinction between config(configMap) and sensitive config(secrets)
-
-## XII-Factor Application
-
-- **declarative format for setup automation** - achieved with `ansible`
-- **clean contract with underlying system** - only `unix-like` system is needed, for windows use WSL2.
-- **suitable for deployment on modern cloud platforms** - achieved with `kubernetes`
-- TODO: no dev/prod deployment yet **Minimize divergence** between development and production - local / dev / prod environments differs mostly just by configuration settings
-- TODO: can **scale up** - achieved with `kubernetes` and autoscalling cloud capabilities.
-
-### Codebase - One codebase tracked in revision control, many deploys
 
 ## Setup automation tests
 
