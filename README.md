@@ -56,3 +56,16 @@ In parallel: `./execute-in-test-container.sh pytest -n 4`
 - TODO: can **scale up** - achieved with `kubernetes` and autoscalling cloud capabilities.
 
 ### Codebase - One codebase tracked in revision control, many deploys
+
+## Setup automation tests
+
+This commands will run setup automation inside ubuntu container
+
+```sh
+docker build -f tests/project-setup/ubuntu/Dockerfile -t ubuntu-test .
+docker run -it --mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock \
+   --mount type=bind,source="$(pwd)",target="$(pwd)" \
+   --network host \
+   ubuntu-test \
+   bash -c "cd /$(pwd)/tests/project-setup/ubuntu && ./test.sh"
+```

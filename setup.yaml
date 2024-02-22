@@ -91,7 +91,7 @@
   gather_facts: no
   tasks:
     - name: Start kubernetes cluster using kind
-      shell: sed "s|PWD_PLACEHOLDER|$(pwd)|g" deployment/local/kind-config-template.yaml | kind create cluster --name 12factor --wait 60s --config=-
+      shell: sed "s|PWD_PLACEHOLDER|$(pwd)|g" deployment/local/kind-config-template.yaml | kind create cluster --name 12factor --wait 30s --config=-
 
     - name: Set kubernetes context to kind-12factor cluster context
       command: kubectl cluster-info --context kind-12factor
