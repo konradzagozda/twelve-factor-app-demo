@@ -10,9 +10,9 @@ Sample modern application created to demonstrate full adherence to `The Twelve-F
 
    - kind
    - docker
-   - python3.11
    - poetry
    - pyenv
+   - python3.11 (pyenv install 3.11.8; pyenv global 3.11.8)
    - git
    - ansible
    - vscode (recommended)
@@ -49,4 +49,10 @@ In parallel: `./execute-in-test-container.sh pytest -n 4`
 
 ## XII-Factor Application
 
-- declarative format for setup automation achieved with `ansible`.
+- **declarative format for setup automation** - achieved with `ansible`
+- **clean contract with underlying system** - only `unix-like` system is needed, for windows use WSL2.
+- **suitable for deployment on modern cloud platforms** - achieved with `kubernetes`
+- TODO: no dev/prod deployment yet **Minimize divergence** between development and production - local / dev / prod environments differs mostly just by configuration settings
+- TODO: can **scale up** - achieved with `kubernetes` and autoscalling cloud capabilities.
+
+### Codebase - One codebase tracked in revision control, many deploys
