@@ -1,6 +1,6 @@
-- name: Check required dependencies
+- name: Install dependencies
   hosts: localhost
-  gather_facts: no
+  gather_facts: yes
   tasks:
     - name: Check for required dependencies
       command: "{{ item.cmd }}"
@@ -8,12 +8,11 @@
       failed_when: result.rc != 0
       changed_when: false
       loop:
-        - { cmd: "kind version", name: "Kind" }
         - { cmd: "docker --version", name: "Docker" }
-        - { cmd: "python3.11 --version", name: "Python 3.11" }
         - { cmd: "poetry --version", name: "Poetry" }
         - { cmd: "git --version", name: "Git" }
         - { cmd: "pyenv --version", name: "Pyenv" }
+        - { cmd: "kind version", name: "Kind" }
       loop_control:
         label: "{{ item.name }}"
 
@@ -46,7 +45,6 @@
 
     - name: Export requirements.txt from lock
       shell: |
-        set -o pipefail
         poetry export -f requirements.txt --output src/requirements.txt.tmp && \
         if ! cmp --silent src/requirements.txt.tmp src/requirements.txt; then
           mv src/requirements.txt.tmp src/requirements.txt
@@ -93,7 +91,7 @@
   gather_facts: no
   tasks:
     - name: Start kubernetes cluster using kind
-      shell: sed "s|PWD_PLACEHOLDER|$(pwd)|g" deployment/local/kind-config-template.yaml | kind create cluster --name 12factor --wait 30s --config=-
+      shell: sed "s|PWD_PLACEHOLDER|$(pwd)|g" deployment/local/kind-config-template.yaml | kind create cluster --name 12factor --wait 60s --config=-
 
     - name: Set kubernetes context to kind-12factor cluster context
       command: kubectl cluster-info --context kind-12factor
