@@ -13,7 +13,6 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install docker
-
 RUN apt-get update && \
     apt-get install -y ca-certificates curl && \
     install -m 0755 -d /etc/apt/keyrings && \
