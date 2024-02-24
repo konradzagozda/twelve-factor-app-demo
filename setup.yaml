@@ -169,7 +169,7 @@
         state: present
         src: deployment/local/12factor-namespace.yaml
 
-    - name: Set current namespace context to 12factor if different with a single shell command
+    - name: Set current namespace context
       shell: |
         current=$(kubectl config view --minify --output 'jsonpath={..namespace}')
         if [ "$current" != "12factor" ]; then
@@ -230,13 +230,30 @@
         - deployment/local/todo-api-db-service.yaml
         - deployment/local/todo-api-web-deployment.yaml
         - deployment/local/todo-api-web-service.yaml
+      register: k8s_apply_result
 
     - name: Pause for 10 seconds
       pause:
         seconds: 10
+      changed_when: False
+      when: k8s_apply_result.results | map(attribute='changed') | list | select | list | length > 0
+
+    - name: Restart todo-api-web-deployment
+      command: kubectl rollout restart deployment/todo-api-web-deployment
+      changed_when: True
+
+    - name: Pause for 10 seconds
+      pause:
+        seconds: 10
+      changed_when: False
 
     - name: Run migrations
       shell: ./execute.sh src/manage.py migrate
+      register: migration_output
+      changed_when: "'No migrations to apply.' not in migration_output.stdout"
 
     - name: Run tests
       shell: ./execute.sh -m pytest
+      register: test_output
+      failed_when: "'failed' in test_output.stdout_lines[-1].lower()"
+      changed_when: False
