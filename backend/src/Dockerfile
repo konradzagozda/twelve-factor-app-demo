@@ -10,13 +10,11 @@ RUN apk update && \
 USER apprunner
 WORKDIR /app
 
-COPY requirements.txt ./
+COPY --chown=apprunner:apprunner requirements.txt ./
 
 RUN python -m venv venv && \
     venv/bin/python -m pip install --no-cache-dir -r requirements.txt
     
-
-USER apprunner
-COPY . ./
+COPY --chown=apprunner:apprunner . ./
 
 ENTRYPOINT ["venv/bin/python", "-m", "uvicorn", "--host", "0.0.0.0", "config.asgi:application"]
