@@ -2,7 +2,6 @@
 __pycache__
 db.sqlite3
 .mypy_cache
-requirements.txt
 nohup.out
 .pytest_cache
 get-pip.py

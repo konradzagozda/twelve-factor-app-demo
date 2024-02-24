@@ -7,7 +7,7 @@ spec:
     spec:
       containers:
         - name: backend-job-container
-          image: backend
+          image: backend-job
           imagePullPolicy: Never
           command: ["/bin/sh", "-c"]
           args: ["/opt/venv/bin/python ARGS_PLACEHOLDER"]
@@ -16,4 +16,18 @@ spec:
                 name: backend-config
             - secretRef:
                 name: backend-secret
+          volumeMounts:
+            - name: backend-src-volume
+              mountPath: /app/src
+            - name: backend-tests-volume
+              mountPath: /app/tests
       restartPolicy: Never
+      volumes: # local only
+        - name: backend-src-volume
+          hostPath:
+            path: /project/backend/src
+            type: Directory
+        - name: backend-tests-volume
+          hostPath:
+            path: /project/backend/tests
+            type: Directory

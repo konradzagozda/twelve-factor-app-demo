@@ -23,10 +23,18 @@ spec:
                 name: backend-config
             - secretRef:
                 name: backend-secret
-          args: ["--reload"] # local only
+          args:
+            [
+              "-m",
+              "uvicorn",
+              "--host",
+              "0.0.0.0",
+              "config.asgi:application",
+              "--reload",
+            ]
           volumeMounts:
             - name: backend-volume
-              mountPath: /app
+              mountPath: /app/src
       volumes: # local only
         - name: backend-volume
           hostPath:

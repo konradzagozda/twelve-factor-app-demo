@@ -1,4 +1,4 @@
-- name: Install dependencies
+- name: Check dependencies
   hosts: localhost
   gather_facts: yes
   tasks:
@@ -16,7 +16,7 @@
       loop_control:
         label: "{{ item.name }}"
 
-- name: Setup backend locally
+- name: Setup Development Environment
   hosts: localhost
   gather_facts: no
   tasks:
@@ -58,14 +58,20 @@
       register: poetry_export_output
       changed_when: "'requirements.txt has changed' in poetry_export_output.stdout"
 
-    - name: Install requirements in src/venv
-      args:
-        chdir: backend/src
-        executable: /bin/bash
+    - name: Export requirements.dev.txt from lock
       shell: |
-        python3.11 -m venv venv
-        source venv/bin/activate
-        python -m pip install -r requirements.txt
+        poetry export -f requirements.txt --output tests/requirements.dev.txt.tmp --only dev && \
+        if ! cmp --silent tests/requirements.dev.txt.tmp tests/requirements.dev.txt; then
+          mv tests/requirements.dev.txt.tmp tests/requirements.dev.txt
+          echo "requirements.dev.txt has changed"
+        else
+          rm tests/requirements.dev.txt.tmp
+          echo "No changes in requirements.dev.txt"
+        fi
+      args:
+        chdir: backend
+      register: poetry_export_output
+      changed_when: "'requirements.dev.txt has changed' in poetry_export_output.stdout"
 
     - name: Activate pre-commit
       shell: |
@@ -122,10 +128,10 @@
       command: docker build -t backend backend/src
 
     - name: Build test docker image
-      command: docker build -t backend-test -f backend/Dockerfile.test backend
+      command: docker build -t backend-job backend/tests
 
     - name: Push docker images to kind
-      command: kind --name 12factor load docker-image backend backend-test
+      command: kind --name 12factor load docker-image backend backend-job
 
     - name: Apply namespace configuration
       k8s:
@@ -152,11 +158,13 @@
         - deployment/local/database-service.yaml
         - deployment/local/backend-deployment.yaml
         - deployment/local/backend-service.yaml
-        - deployment/local/backend-test-deployment.yaml
 
     - name: Pause for 10 seconds
       pause:
         seconds: 10
 
     - name: Run migrations
-      shell: ./execute.sh manage.py migrate
+      shell: ./execute.sh src/manage.py migrate
+
+    - name: Run tests
+      shell: ./execute.sh -m pytest

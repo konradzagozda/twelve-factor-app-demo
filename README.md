@@ -91,7 +91,7 @@ Deploy has 3 stages:
 - run against a release
 - favors languages which provide a REPL shell out of the box
 
-achieved with `django manage.py <command>`
+achieved with `kubernetes job` and `django manage.py <command>`
 
 ## Setting Up The Project
 
@@ -117,10 +117,12 @@ achieved with `django manage.py <command>`
 
 4. Access backend service: `http://localhost:30000`
 
-## Tests
+## Admin processes
 
-Run the tests using `./execute-in-test-container.sh pytest`
-In parallel: `./execute-in-test-container.sh pytest -n 4`
+`./execute.sh -m pytest`
+`./execute.sh -m pytest -n 4`
+`./execute.sh src/manage.py migrate`
+`./execute.sh src/manage.py makemigrations`
 
 ## Tech Stack
 
@@ -130,11 +132,6 @@ In parallel: `./execute-in-test-container.sh pytest -n 4`
   - uvicorn
 - kubernetes
 - ansible
-
-## Features
-
-- Dockerfiles built with best practice in mind: minimal size, security, single Dockerfile for every environment
-- Distinction between config(configMap) and sensitive config(secrets)
 
 ## Setup automation tests
 
