@@ -58,6 +58,15 @@
       register: poetry_export_output
       changed_when: "'requirements.txt has changed' in poetry_export_output.stdout"
 
+    - name: Install requirements in src/venv
+      args:
+        chdir: backend/src
+        executable: /bin/bash
+      shell: |
+        python3.11 -m venv venv
+        source venv/bin/activate
+        python -m pip install -r requirements.txt
+
     - name: Activate pre-commit
       shell: |
         if [ -f .git/hooks/pre-commit ]; then
@@ -86,9 +95,22 @@
       failed_when: pre_commit_install_output.rc not in [0,1]
       ignore_errors: false
 
+    - name: Get Python interpreter path
+      shell: poetry env info -p
+      args:
+        chdir: backend
+      register: poetry_env_path
+      changed_when: false
+
+    - name: Set Python interpreter as a fact
+      set_fact:
+        ansible_python_interpreter: "{{ poetry_env_path.stdout }}/bin/python"
+
 - name: Create kuberenetes resources
   hosts: localhost
   gather_facts: no
+  vars:
+    ansible_python_interpreter: "{{ hostvars['localhost']['ansible_python_interpreter'] }}"
   tasks:
     - name: Start kubernetes cluster using kind
       shell: sed "s|PWD_PLACEHOLDER|$(pwd)|g" deployment/local/kind-config-template.yaml | kind create cluster --name 12factor --wait 30s --config=-

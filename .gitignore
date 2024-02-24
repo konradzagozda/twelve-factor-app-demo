@@ -6,3 +6,4 @@ requirements.txt
 nohup.out
 .pytest_cache
 get-pip.py
+venv
