@@ -12,10 +12,11 @@ WORKDIR /app
 
 COPY requirements.txt ./
 
-RUN pip install --no-cache-dir -r requirements.txt --no-cache-dir
+RUN python -m venv venv && \
+    venv/bin/python -m pip install --no-cache-dir -r requirements.txt
     
 
 USER apprunner
 COPY . ./
 
-ENTRYPOINT ["python", "-m", "uvicorn", "--host", "0.0.0.0", "config.asgi:application"]
+ENTRYPOINT ["venv/bin/python", "-m", "uvicorn", "--host", "0.0.0.0", "config.asgi:application"]
