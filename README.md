@@ -2,7 +2,7 @@
 
 ## Description
 
-Sample modern application created to demonstrate full adherence to `The Twelve-Factor App` methodology.
+Example application created to demonstrate full adherence to `The Twelve-Factor App` methodology.
 
 ## XII-Factor Application
 
