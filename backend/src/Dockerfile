@@ -6,7 +6,7 @@ ENV PYTHONUNBUFFERED 1
 RUN apk update && \
     apk add --no-cache postgresql-libs gcc musl-dev postgresql-dev
 
-WORKDIR /app
+WORKDIR /app/src
 
 COPY requirements.txt ./
 
