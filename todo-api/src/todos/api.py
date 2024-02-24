@@ -9,7 +9,7 @@ from todos.errors import TODO_NOT_FOUND
 from todos.models import Todo
 from todos.schemas import TodoAll, TodoCreate, TodoPatch
 
-router = Router()
+router = Router(tags=["todo"])
 
 
 @router.post("/", response={201: TodoAll})
