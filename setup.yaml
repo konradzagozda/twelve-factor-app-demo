@@ -257,3 +257,12 @@
       register: test_output
       failed_when: "'failed' in test_output.stdout_lines[-1].lower()"
       changed_when: False
+
+    - name: Health check for the service
+      uri:
+        url: http://localhost:30000/api/docs
+        method: GET
+        return_content: yes
+        status_code: 200
+      register: healthcheck_response
+      failed_when: healthcheck_response.status != 200

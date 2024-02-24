@@ -143,6 +143,5 @@ docker build -f tests/project-setup/ubuntu/Dockerfile -t ubuntu-test .
 docker run -it --mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock \
    --mount type=bind,source="$(pwd)",target="$(pwd)" \
    --network host \
-   ubuntu-test \
-   bash -c "cd /$(pwd)/tests/project-setup/ubuntu && ./test.sh"
+   ubuntu-test sh -c "cd $(pwd) && ansible-playbook setup.yaml"
 ```
