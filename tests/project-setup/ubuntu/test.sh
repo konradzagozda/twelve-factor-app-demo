@@ -1,10 +1,7 @@
 #!/bin/bash
 
-cd ../../../todo-api
-PYTHON_INTERPRETER=$(poetry run which python)
-cd ..
 # setup
-ansible-playbook setup.yaml -e "ansible_python_interpreter=${PYTHON_INTERPRETER}"
+cd ../../.. && ansible-playbook setup.yaml
 
 # test if service is available
 response=$(curl -I -L http://localhost:30000/api/docs 2>/dev/null | grep HTTP/ | tail -n 1)
