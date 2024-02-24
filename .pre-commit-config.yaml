@@ -8,23 +8,27 @@ repos:
     hooks:
       - id: black
         name: black
-        entry: sh -c 'cd todo-api && poetry run black .'
-        language: system
+        entry: poetry -C todo-api run black
+        language: python
         require_serial: true
+        args: [--config=todo-api/pyproject.toml]
         types_or: [python, pyi]
 
       - id: flake8
         name: flake8
-        entry: sh -c 'cd todo-api && poetry run flake8'
-        language: system
+        entry: poetry -C todo-api run flake8
+        language: python
         require_serial: true
+        args: [--config=todo-api/.flake8]
         types: [python]
 
       - id: isort
         name: isort
-        entry: sh -c 'cd todo-api && poetry run isort .'
-        language: system
+        entry: poetry -C todo-api run isort
+        stages: [commit, merge-commit, push, manual]
+        language: python
         require_serial: true
+        args: ["--filter-files"]
         types_or: [cython, pyi, python]
 
       - id: mypy-src
@@ -33,6 +37,7 @@ repos:
         language: system
         require_serial: true
         types_or: [python, pyi]
+        pass_filenames: false
 
       - id: mypy-tests
         name: mypy-tests
@@ -40,3 +45,4 @@ repos:
         language: system
         require_serial: true
         types_or: [python, pyi]
+        pass_filenames: false
