@@ -1,14 +1,14 @@
 {
-  // backend
+  // todo-api
   "flake8.importStrategy": "fromEnvironment",
-  "flake8.cwd": "${workspaceFolder}/backend",
+  "flake8.cwd": "${workspaceFolder}/todo-api",
   "mypy-type-checker.importStrategy": "fromEnvironment",
-  "mypy-type-checker.cwd": "${workspaceFolder}/backend",
+  "mypy-type-checker.cwd": "${workspaceFolder}/todo-api",
   "isort.importStrategy": "fromEnvironment",
   "isort.check": true,
   "isort.args": [
     "--settings-path",
-    "${workspaceFolder}/backend/pyproject.toml"
+    "${workspaceFolder}/todo-api/pyproject.toml"
   ],
   "[python]": {
     "editor.defaultFormatter": "ms-python.black-formatter",
@@ -17,7 +17,7 @@
   "black-formatter.importStrategy": "fromEnvironment",
   "black-formatter.args": [
     "--config",
-    "${workspaceFolder}/backend/pyproject.toml"
+    "${workspaceFolder}/todo-api/pyproject.toml"
   ],
   "python.analysis.packageIndexDepths": [
     {

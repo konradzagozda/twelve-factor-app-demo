@@ -1,33 +1,33 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: backend-job
+  name: todo-api-job
 spec:
   template:
     spec:
       containers:
-        - name: backend-job-container
-          image: backend-job
+        - name: todo-api-job-container
+          image: todo-api-job
           imagePullPolicy: Never
           command: ["/bin/sh", "-c"]
           args: ["/opt/venv/bin/python ARGS_PLACEHOLDER"]
           envFrom:
             - configMapRef:
-                name: backend-config
+                name: todo-api-config
             - secretRef:
-                name: backend-secret
+                name: todo-api-secret
           volumeMounts:
-            - name: backend-src-volume
+            - name: todo-api-src-volume
               mountPath: /app/src
-            - name: backend-tests-volume
+            - name: todo-api-tests-volume
               mountPath: /app/tests
       restartPolicy: Never
       volumes: # local only
-        - name: backend-src-volume
+        - name: todo-api-src-volume
           hostPath:
-            path: /project/backend/src
+            path: /project/todo-api/src
             type: Directory
-        - name: backend-tests-volume
+        - name: todo-api-tests-volume
           hostPath:
-            path: /project/backend/tests
+            path: /project/todo-api/tests
             type: Directory

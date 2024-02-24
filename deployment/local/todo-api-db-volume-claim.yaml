@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: database-pvc
+  name: todo-api-db-pvc
 spec:
   accessModes:
     - ReadWriteOnce

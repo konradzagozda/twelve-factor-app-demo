@@ -1,5 +1,5 @@
 # extends src/Dockerfile, used to run jobs and tests
-FROM backend
+FROM todo-api
 
 WORKDIR /app
 COPY requirements.dev.txt ./tests/

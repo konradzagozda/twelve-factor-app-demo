@@ -1,28 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-deployment
+  name: todo-api-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: backend
+      app: todo-api
   template:
     metadata:
       labels:
-        app: backend
+        app: todo-api
     spec:
       containers:
-        - name: backend-container
-          image: backend
+        - name: todo-api-container
+          image: todo-api
           imagePullPolicy: Never
           ports:
             - containerPort: 8000
           envFrom:
             - configMapRef:
-                name: backend-config
+                name: todo-api-config
             - secretRef:
-                name: backend-secret
+                name: todo-api-secret
           args:
             [
               "-m",
@@ -33,10 +33,10 @@ spec:
               "--reload",
             ]
           volumeMounts:
-            - name: backend-volume
+            - name: todo-api-volume
               mountPath: /app/src
       volumes: # local only
-        - name: backend-volume
+        - name: todo-api-volume
           hostPath:
-            path: /project/backend/src
+            path: /project/todo-api/src
             type: Directory

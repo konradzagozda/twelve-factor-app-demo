@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: database-service
+  name: todo-api-db-service
 spec:
   selector:
-    app: database
+    app: todo-api-db
   ports:
     - protocol: TCP
       port: 5432

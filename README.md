@@ -113,9 +113,9 @@ achieved with `kubernetes job` and `django manage.py <command>`
 3. Activate virtualenv
 
    - in your IDE
-   - in your shell: `cd backend && poetry shell`
+   - in your shell: `cd todo-api && poetry shell`
 
-4. Access backend service: `http://localhost:30000`
+4. Access todo-api service: `http://localhost:30000`
 
 ## Admin processes
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd ../../../backend
+cd ../../../todo-api
 PYTHON_INTERPRETER=$(poetry run which python)
 cd ..
 # setup

@@ -8,35 +8,35 @@ repos:
     hooks:
       - id: black
         name: black
-        entry: sh -c 'cd backend && poetry run black .'
+        entry: sh -c 'cd todo-api && poetry run black .'
         language: system
         require_serial: true
         types_or: [python, pyi]
 
       - id: flake8
         name: flake8
-        entry: sh -c 'cd backend && poetry run flake8'
+        entry: sh -c 'cd todo-api && poetry run flake8'
         language: system
         require_serial: true
         types: [python]
 
       - id: isort
         name: isort
-        entry: sh -c 'cd backend && poetry run isort .'
+        entry: sh -c 'cd todo-api && poetry run isort .'
         language: system
         require_serial: true
         types_or: [cython, pyi, python]
 
       - id: mypy-src
         name: mypy-src
-        entry: sh -c 'source load-env.sh && cd backend/src && poetry run mypy . --config-file=../pyproject.toml'
+        entry: sh -c 'source load-env.sh && cd todo-api/src && poetry run mypy . --config-file=../pyproject.toml'
         language: system
         require_serial: true
         types_or: [python, pyi]
 
       - id: mypy-tests
         name: mypy-tests
-        entry: sh -c 'source load-env.sh && cd backend/tests && poetry run mypy . --config-file=../pyproject.toml --explicit-package-bases'
+        entry: sh -c 'source load-env.sh && cd todo-api/tests && poetry run mypy . --config-file=../pyproject.toml --explicit-package-bases'
         language: system
         require_serial: true
         types_or: [python, pyi]

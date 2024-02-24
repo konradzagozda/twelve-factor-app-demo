@@ -5,12 +5,12 @@
 ARGS="$*"
 
 # Define a static job name
-JOB_NAME="backend-job"
+JOB_NAME="todo-api-job"
 
 kubectl delete job $JOB_NAME --ignore-not-found
 
 # Replace the placeholder for ARGS in the template and apply it
-sed "s|ARGS_PLACEHOLDER|$ARGS|g" deployment/local/backend-job-template.yaml | kubectl apply -f -
+sed "s|ARGS_PLACEHOLDER|$ARGS|g" deployment/local/todo-api-job-template.yaml | kubectl apply -f -
 
 # Wait for the job's pod to appear
 echo "Waiting for the job's pod to be created..."
