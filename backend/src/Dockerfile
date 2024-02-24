@@ -4,17 +4,16 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 RUN apk update && \
-    apk add --no-cache postgresql-libs gcc musl-dev postgresql-dev && \
-    adduser -D apprunner
+    apk add --no-cache postgresql-libs gcc musl-dev postgresql-dev
 
-USER apprunner
 WORKDIR /app
 
-COPY --chown=apprunner:apprunner requirements.txt ./
+COPY requirements.txt ./
 
-RUN python -m venv venv && \
-    venv/bin/python -m pip install --no-cache-dir -r requirements.txt
+RUN python -m venv /opt/venv && \
+    /opt/venv/bin/python -m pip install --no-cache-dir -r requirements.txt
     
-COPY --chown=apprunner:apprunner . ./
+COPY . ./
 
-ENTRYPOINT ["venv/bin/python", "-m", "uvicorn", "--host", "0.0.0.0", "config.asgi:application"]
+ENTRYPOINT ["/opt/venv/bin/python"]
+CMD ["-m", "uvicorn", "--host", "0.0.0.0", "config.asgi:application"]

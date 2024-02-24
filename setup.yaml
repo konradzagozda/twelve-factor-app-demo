@@ -159,4 +159,4 @@
         seconds: 10
 
     - name: Run migrations
-      shell: ./execute.sh python manage.py migrate
+      shell: ./execute.sh manage.py migrate

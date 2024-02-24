@@ -1,6 +1,24 @@
 #!/bin/bash
-# execute commands inside a container
+# example usage: ./execute.sh manage.py migrate
 
-kubectl config set-context --current --namespace=12factor
-POD_NAME=$(kubectl get pods -l app=backend -o jsonpath="{.items[0].metadata.name}")
-kubectl exec $POD_NAME -- "$@"
+# Command line arguments
+ARGS="$*"
+
+# Define a static job name
+JOB_NAME="backend-job"
+
+kubectl delete job $JOB_NAME --ignore-not-found
+
+# Replace the placeholder for ARGS in the template and apply it
+sed "s|ARGS_PLACEHOLDER|$ARGS|g" deployment/local/backend-job-template.yaml | kubectl apply -f -
+
+# Wait for the job's pod to appear
+echo "Waiting for the job's pod to be created..."
+until POD_NAME=$(kubectl get pods --selector=job-name=$JOB_NAME --output=jsonpath='{.items[0].metadata.name}'); do
+    echo -n "."
+    sleep 1
+done
+echo "Pod has been created. Pod name: $POD_NAME"
+
+sleep 3
+kubectl logs -f $POD_NAME

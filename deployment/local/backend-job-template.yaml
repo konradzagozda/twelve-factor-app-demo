@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: backend-job
+spec:
+  template:
+    spec:
+      containers:
+        - name: backend-job-container
+          image: backend
+          imagePullPolicy: Never
+          command: ["/bin/sh", "-c"]
+          args: ["/opt/venv/bin/python ARGS_PLACEHOLDER"]
+          envFrom:
+            - configMapRef:
+                name: backend-config
+            - secretRef:
+                name: backend-secret
+      restartPolicy: Never
