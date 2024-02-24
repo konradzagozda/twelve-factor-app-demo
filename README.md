@@ -104,6 +104,7 @@ achieved with `kubernetes job` and `django manage.py <command>`
    - python3.11 (pyenv install 3.11.8; pyenv global 3.11.8)
    - git
    - ansible
+   - yq
    - vscode (recommended)
 
 2. Run automation playbook that will scaffold project for you:

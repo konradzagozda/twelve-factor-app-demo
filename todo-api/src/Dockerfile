@@ -12,7 +12,7 @@ COPY requirements.txt ./
 
 RUN python -m venv /opt/venv && \
     /opt/venv/bin/python -m pip install --no-cache-dir -r requirements.txt
-    
+
 COPY . ./
 
 ENTRYPOINT ["/opt/venv/bin/python"]

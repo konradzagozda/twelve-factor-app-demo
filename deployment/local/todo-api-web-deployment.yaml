@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: todo-api-container
-          image: todo-api
+          image: todo-api-web
           imagePullPolicy: Never
           ports:
             - containerPort: 8000

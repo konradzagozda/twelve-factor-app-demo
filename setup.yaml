@@ -13,6 +13,7 @@
         - { cmd: "git --version", name: "Git" }
         - { cmd: "pyenv --version", name: "Pyenv" }
         - { cmd: "kind version", name: "Kind" }
+        - { cmd: "yq --version", name: "yq" }
       loop_control:
         label: "{{ item.name }}"
 
@@ -118,34 +119,105 @@
   vars:
     ansible_python_interpreter: "{{ hostvars['localhost']['ansible_python_interpreter'] }}"
   tasks:
-    - name: Start kubernetes cluster using kind
-      shell: sed "s|PWD_PLACEHOLDER|$(pwd)|g" deployment/local/kind-config-template.yaml | kind create cluster --name 12factor --wait 30s --config=-
-
-    - name: Set kubernetes context to kind-12factor cluster context
-      command: kubectl cluster-info --context kind-12factor
+    - name: Start Kubernetes cluster using kind if it does not exist
+      shell: |
+        if ! kind get clusters | grep -q 12factor; then
+          sed "s|PWD_PLACEHOLDER|$(pwd)|g" deployment/local/kind-config-template.yaml | kind create cluster --name 12factor --wait 30s --config=-
+          echo "ClusterCreated"
+        else
+          echo "ClusterExists"
+        fi
+      register: kind_result
+      changed_when: "'ClusterCreated' in kind_result.stdout"
 
     - name: Build docker image
-      command: docker build -t todo-api todo-api/src
+      shell: |
+        before_build_image_id=$(docker images -q todo-api-web)
+        docker build -t todo-api-web todo-api/src
+        after_build_image_id=$(docker images -q todo-api-web)
+        if [ "$before_build_image_id" != "$after_build_image_id" ]; then
+          echo "Docker image was rebuilt"
+        else
+          echo "Docker image was unchanged"
+        fi
+      register: build_status
+      changed_when: "'Docker image was rebuilt' in build_status.stdout"
 
-    - name: Build test docker image
-      command: docker build -t todo-api-job todo-api/tests
+    - name: Build job docker image
+      shell: |
+        before_build_image_id=$(docker images -q todo-api-job)
+        docker build -t todo-api-job todo-api/tests
+        after_build_image_id=$(docker images -q todo-api-job)
+        if [ "$before_build_image_id" != "$after_build_image_id" ]; then
+          echo "Docker image was rebuilt"
+        else
+          echo "Docker image was unchanged"
+        fi
+      register: build_status
+      changed_when: "'Docker image was rebuilt' in build_status.stdout"
 
-    - name: Push docker images to kind
-      command: kind --name 12factor load docker-image todo-api todo-api-job
+    - name: Ensure Docker images are present in kind
+      shell: kind --name 12factor load docker-image {{ item }}
+      loop:
+        - todo-api-web
+        - todo-api-job
+      register: kind_image_sync
+      changed_when: "'not yet present' in kind_image_sync.stderr"
 
     - name: Apply namespace configuration
       k8s:
         state: present
         src: deployment/local/12factor-namespace.yaml
 
-    - name: Set current namespace context
-      shell: kubectl config set-context --current --namespace=12factor
+    - name: Set current namespace context to 12factor if different with a single shell command
+      shell: |
+        current=$(kubectl config view --minify --output 'jsonpath={..namespace}')
+        if [ "$current" != "12factor" ]; then
+          kubectl config set-context --current --namespace=12factor
+          echo "namespace changed"
+        else
+          echo "no change"
+        fi
+      register: namespace_change
+      changed_when: "'namespace changed' in namespace_change.stdout"
 
-    - name: Create ConfigMap from env file
-      shell: kubectl create configmap todo-api-config --from-env-file=local.env
+    - name: Create ConfigMap from local.env
+      shell: |
+        if ! current=$(kubectl get configmap todo-api-config -o yaml | yq e 'del(.metadata)' -); then
+          echo "ConfigMap does not exist. Creating new one."
+          kubectl create configmap todo-api-config --from-env-file=local.env
+          echo "ConfigMapCreated"
+        else
+          desired=$(kubectl create configmap todo-api-config --from-env-file=local.env --dry-run=client -o yaml | yq e 'del(.metadata)' -)
+          if [ "$desired" != "$current" ]; then
+            echo "ConfigMap has changed. Updating."
+            kubectl create configmap todo-api-config --from-env-file=local.env --dry-run=client -o yaml | kubectl apply -f -
+            echo "ConfigMapUpdated"
+          else
+            echo "ConfigMap is up-to-date."
+          fi
+        fi
+      register: update_configmap
+      changed_when: "'ConfigMapCreated' in update_configmap.stdout or 'ConfigMapUpdated' in update_configmap.stdout"
 
-    - name: Create Secret from env file
-      shell: kubectl create secret generic todo-api-secret --from-env-file=local.secret.env
+    - name: Create Secret from local.secret.env
+      shell: |
+        if ! current=$(kubectl get secret todo-api-secret -o yaml | yq e 'del(.metadata, .type)' -); then
+          echo "Secret does not exist. Creating new one."
+          kubectl create secret generic todo-api-secret --from-env-file=local.secret.env
+          echo "SecretCreated"
+        else
+          desired=$(kubectl create secret generic todo-api-secret --from-env-file=local.secret.env --dry-run=client -o yaml | yq e 'del(.metadata)' -)
+          if [ "$desired" != "$current" ]; then
+            echo "Secret has changed. Updating."
+            kubectl create secret generic todo-api-secret --from-env-file=local.secret.env --dry-run=client -o yaml | kubectl apply -f -
+            echo "SecretUpdated"
+          else
+            echo "Secret is up-to-date."
+          fi
+        fi
+      register: update_secret
+      changed_when: "'SecretCreated' in update_secret.stdout or 'SecretUpdated' in update_secret.stdout"
 
     - name: Apply Kubernetes configurations
       k8s:
@@ -156,8 +228,8 @@
         - deployment/local/todo-api-db-volume-claim.yaml
         - deployment/local/todo-api-db-deployment.yaml
         - deployment/local/todo-api-db-service.yaml
-        - deployment/local/todo-api-deployment.yaml
-        - deployment/local/todo-api-service.yaml
+        - deployment/local/todo-api-web-deployment.yaml
+        - deployment/local/todo-api-web-service.yaml
 
     - name: Pause for 10 seconds
       pause:

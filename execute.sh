@@ -1,10 +1,10 @@
 #!/bin/bash
-# example usage: ./execute.sh manage.py migrate
+# example usage: 
+#   ./execute.sh src/manage.py migrate
+#   ./execute.sh -m pytest
 
-# Command line arguments
 ARGS="$*"
 
-# Define a static job name
 JOB_NAME="todo-api-job"
 
 kubectl delete job $JOB_NAME --ignore-not-found
