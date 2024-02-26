@@ -17,3 +17,8 @@ output "cluster_name" {
   description = "Kubernetes Cluster Name"
   value       = module.eks.cluster_name
 }
+
+output "db_host" {
+  description = "The database host (address) for connecting to the database"
+  value       = aws_db_instance.todo_api_db.address
+}

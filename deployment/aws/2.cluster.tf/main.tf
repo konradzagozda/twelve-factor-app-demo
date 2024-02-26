@@ -25,8 +25,13 @@ module "vpc" {
   cidr = "10.0.0.0/16"
   azs  = slice(data.aws_availability_zones.available.names, 0, 3)
 
+  
   private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
   public_subnets  = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
+
+  database_subnets = ["10.0.7.0/24", "10.0.8.0/24", "10.0.9.0/24"]
+  database_subnet_group_name = "subnet-group"
+  create_database_subnet_group  = true
 
   enable_nat_gateway   = true
   single_nat_gateway   = true
@@ -80,4 +85,18 @@ module "eks" {
       desired_size = 1
     }
   }
+}
+
+
+resource "aws_db_instance" "todo_api_db" {
+  identifier = "todo-api-db"
+  allocated_storage    = 5
+  db_name              = data.aws_ssm_parameter.db_name.value
+  engine               = "postgres"
+  engine_version       = "15.6"
+  instance_class       = "db.t3.micro"
+  username             = data.aws_ssm_parameter.db_user.value
+  password             = data.aws_secretsmanager_secret_version.todo_api_db_password.secret_string
+  db_subnet_group_name  = module.vpc.database_subnet_group_name
+  skip_final_snapshot = true
 }
