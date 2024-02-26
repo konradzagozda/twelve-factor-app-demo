@@ -14,6 +14,7 @@
         - { cmd: "pyenv --version", name: "Pyenv" }
         - { cmd: "kind version", name: "Kind" }
         - { cmd: "yq --version", name: "yq" }
+        - { cmd: "kubectl version --client", name: "kubectl" }
       loop_control:
         label: "{{ item.name }}"
 

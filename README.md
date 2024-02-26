@@ -23,7 +23,7 @@ Example application created to demonstrate full adherence to `The Twelve-Factor 
 
 - TODO: no reliance on implicit existence of system-wide packages - achieved with `venv`
 - exact dependency declaration - achieved with `poetry.lock`
-- no reliance on the implicit existence of any system tools (at runtime)
+- no reliance on the implicit existence of any system tools (at runtime) - achieved with `venv`
 
 ### III. Config - Store config in the environment
 
@@ -105,11 +105,12 @@ achieved with `kubernetes job` and `django manage.py <command>`
    - git
    - ansible
    - yq
+   - kubectl
    - vscode (recommended)
 
 2. Run automation playbook that will scaffold project for you:
 
-   `ansible-playbook setup.yaml`
+   `ansible-playbook setup.ansible.yaml`
 
 3. Activate virtualenv
 
@@ -143,5 +144,5 @@ docker build -f tests/project-setup/ubuntu/Dockerfile -t ubuntu-test .
 docker run -it --mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock \
    --mount type=bind,source="$(pwd)",target="$(pwd)" \
    --network host \
-   ubuntu-test sh -c "cd $(pwd) && ansible-playbook setup.yaml"
+   ubuntu-test sh -c "cd $(pwd) && ansible-playbook setup.ansible.yaml"
 ```

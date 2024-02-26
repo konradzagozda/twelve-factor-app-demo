@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: todo-api-job
+spec:
+  template:
+    spec:
+      containers:
+        - name: todo-api-job-container
+          image: todo-api-job
+          imagePullPolicy: Never
+          command: ["/bin/sh", "-c"]
+          args: ["/opt/venv/bin/python ARGS_PLACEHOLDER"]
+          envFrom:
+            - configMapRef:
+                name: todo-api-config
+            - secretRef:
+                name: todo-api-secret
+          volumeMounts:
+            - name: todo-api-src-volume
+              mountPath: /app/src
+            - name: todo-api-tests-volume
+              mountPath: /app/tests
+      restartPolicy: Never
+      volumes: # local only
+        - name: todo-api-src-volume
+          hostPath:
+            path: /project/todo-api/src
+            type: Directory
+        - name: todo-api-tests-volume
+          hostPath:
+            path: /project/todo-api/tests
+            type: Directory

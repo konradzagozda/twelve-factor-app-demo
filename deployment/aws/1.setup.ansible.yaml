@@ -1,0 +1,55 @@
+- name: Check requirements
+  hosts: localhost
+  gather_facts: yes
+  tasks:
+    - name: Check for required dependencies
+      command: "{{ item.cmd }}"
+      register: result
+      failed_when: result.rc != 0
+      changed_when: false
+      loop:
+        - { cmd: "aws --version", name: "aws cli" }
+        - { cmd: "kubectl version --client", name: "kubectl" }
+        - { cmd: "terraform --version", name: "terraform" }
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: Check AWS connection
+      command: aws sts get-caller-identity --profile {{ aws_profile }}
+      register: aws_identity
+      failed_when: aws_identity.rc != 0
+      changed_when: false
+
+- name: Create EKS cluter
+  hosts: localhost
+  gather_facts: yes
+  tasks:
+    - name: Initialize Terraform
+      ansible.builtin.command:
+        cmd: terraform init
+        chdir: tf
+      register: terraform_init
+      failed_when: terraform_init.rc != 0
+      changed_when: false
+
+    - name: Generate Terraform plan
+      ansible.builtin.shell:
+        cmd: "terraform plan -out=tfplan -var 'profile={{ aws_profile }}' -var 'region={{ aws_region }}'"
+        chdir: tf
+      register: terraform_plan
+      failed_when: terraform_plan.rc != 0
+      changed_when: false
+
+    - name: Prompt for confirmation to apply Terraform plan
+      ansible.builtin.pause:
+        prompt: "Review the Terraform plan (tfplan). Do you want to proceed with applying this plan? Type 'yes' to proceed."
+      register: user_confirmation
+
+    - name: Apply Terraform plan (can take 15 minutes~)
+      ansible.builtin.shell:
+        cmd: "terraform apply -auto-approve tfplan"
+        chdir: tf
+      when: user_confirmation.user_input == 'yes'
+      register: terraform_apply
+      failed_when: terraform_apply.rc != 0
+      changed_when: true

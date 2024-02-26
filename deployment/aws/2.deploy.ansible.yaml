@@ -1,0 +1,27 @@
+- name: Check requirements
+  hosts: localhost
+  gather_facts: yes
+  tasks:
+    - name: Check for required dependencies
+      command: "{{ item.cmd }}"
+      register: result
+      failed_when: result.rc != 0
+      changed_when: false
+      loop:
+        - { cmd: "aws --version", name: "aws cli" }
+        - { cmd: "kubectl version --client", name: "kubectl" }
+        - { cmd: "terraform --version", name: "terraform" }
+      loop_control:
+        label: "{{ item.name }}"
+
+- name: Deploy app to cluster
+  hosts: localhost
+  gather_facts: yes
+  tasks:
+    - name: Configure kubectl with EKS context
+      ansible.builtin.shell: |
+        aws eks --region $(cd tf && terraform output -raw region) update-kubeconfig \
+          --name $(cd tf && terraform output -raw cluster_name)
+      register: kubeconfig_update
+      failed_when: kubeconfig_update.rc != 0
+      changed_when: false
