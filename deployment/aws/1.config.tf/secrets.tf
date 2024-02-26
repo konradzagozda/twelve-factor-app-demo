@@ -4,8 +4,7 @@ resource "aws_secretsmanager_secret" "todo_api_db_password" {
 
 resource "random_password" "todo_api_db_password" {
   length           = 16
-  special          = true
-  override_special = "_%@"
+  special = false
   keepers = {
     id = aws_secretsmanager_secret.todo_api_db_password.id
   }
