@@ -2,7 +2,7 @@ resource "aws_ssm_parameter" "allowed_hosts" {
   name  = "/todo_api/ALLOWED_HOSTS"
   type  = "String"
   value = "*"
-  description = "Frontend domains that should be allowed to communicate to api via web browser"
+  description = "Comma separated frontend domains that should be allowed to communicate to api via web browser"
 }
 
 resource "aws_ssm_parameter" "debug" {
