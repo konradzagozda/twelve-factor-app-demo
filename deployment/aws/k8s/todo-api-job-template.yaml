@@ -16,18 +16,3 @@ spec:
                 name: todo-api-config
             - secretRef:
                 name: todo-api-secret
-          volumeMounts:
-            - name: todo-api-src-volume
-              mountPath: /app/src
-            - name: todo-api-tests-volume
-              mountPath: /app/tests
-      restartPolicy: Never
-      volumes: # local only
-        - name: todo-api-src-volume
-          hostPath:
-            path: /project/todo-api/src
-            type: Directory
-        - name: todo-api-tests-volume
-          hostPath:
-            path: /project/todo-api/tests
-            type: Directory

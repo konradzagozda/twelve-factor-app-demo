@@ -9,3 +9,5 @@ data "aws_ssm_parameter" "db_user" {
 data "aws_secretsmanager_secret_version" "todo_api_db_password" {
   secret_id = "/todo_api/DB_PASSWORD"
 }
+
+data "aws_caller_identity" "current" {}

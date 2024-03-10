@@ -22,3 +22,19 @@ output "db_host" {
   description = "The database host (address) for connecting to the database"
   value       = aws_db_instance.todo_api_db.address
 }
+
+output "todo_api_job_repository_url" {
+  value = aws_ecr_repository.todo_api_job.repository_url
+}
+
+output "todo_api_web_repository_url" {
+  value = aws_ecr_repository.todo_api_web.repository_url
+}
+
+output "account_id" {
+  value = data.aws_caller_identity.current.account_id
+}
+
+output "profile" {
+  value = var.profile
+}

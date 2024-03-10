@@ -1,7 +1,7 @@
 #!/bin/bash
-# usage: ./create-secret-file.sh AWS_PROFILE
+# usage: ./create-secret-file.sh
 
-AWS_PROFILE=$1
+PROFILE=$(terraform -chdir=2.cluster.tf output -raw profile)
 # Output .env file
 ENV_FILE="cloud.secret.env"
 
@@ -19,7 +19,7 @@ for SECRET in "${SECRETS[@]}"; do
     ENV_NAME=$(echo "$SECRET" | awk -F'/' '{print $NF}')
 
     # Fetch the parameter value from AWS SSM using the specified profile
-    VALUE=$(AWS_PROFILE=$AWS_PROFILE aws secretsmanager get-secret-value --secret-id $SECRET --query 'SecretString' --output text)
+    VALUE=$(AWS_PROFILE=$PROFILE aws secretsmanager get-secret-value --secret-id $SECRET --query 'SecretString' --output text)
 
     # Append to the .env file
     echo "${ENV_NAME}=${VALUE}" >> "$ENV_FILE"

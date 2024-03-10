@@ -20,8 +20,8 @@
   tasks:
     - name: Configure kubectl with EKS context
       ansible.builtin.shell: |
-        aws eks --region $(cd tf && terraform output -raw region) update-kubeconfig \
-          --name $(cd tf && terraform output -raw cluster_name)
+        aws eks --region $(cd 2.cluster.tf && terraform output -raw region) update-kubeconfig \
+          --name $(cd 2.cluster.tf && terraform output -raw cluster_name)
       register: kubeconfig_update
       failed_when: kubeconfig_update.rc != 0
       changed_when: false

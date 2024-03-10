@@ -1,6 +1,7 @@
 #!/bin/bash
-# usage: ./create-env-file.sh AWS_PROFILE
-AWS_PROFILE=$1
+# usage: ./create-env-file.sh
+
+PROFILE=$(terraform -chdir=2.cluster.tf output -raw profile)
 # Output .env file
 ENV_FILE="cloud.env"
 
@@ -22,7 +23,7 @@ for PARAM in "${PARAMS[@]}"; do
     ENV_NAME=$(echo "$PARAM" | awk -F'/' '{print $NF}')
 
     # Fetch the parameter value from AWS SSM using the specified profile
-    VALUE=$(AWS_PROFILE=$AWS_PROFILE aws ssm get-parameter --name "$PARAM" --query 'Parameter.Value' --output text)
+    VALUE=$(AWS_PROFILE=$PROFILE aws ssm get-parameter --name "$PARAM" --query 'Parameter.Value' --output text)
 
     # Append to the .env file
     echo "${ENV_NAME}=${VALUE}" >> "$ENV_FILE"
