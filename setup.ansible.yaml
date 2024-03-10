@@ -131,6 +131,10 @@
       register: kind_result
       changed_when: "'ClusterCreated' in kind_result.stdout"
 
+    - name: Set kubectl context to kind-12factor
+      ansible.builtin.command:
+        cmd: kubectl config use-context kind-12factor
+
     - name: Build docker image
       shell: |
         before_build_image_id=$(docker images -q todo-api-web)

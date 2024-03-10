@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: todo-api-container
-          image: todo-api-web
-          imagePullPolicy: Always
+          image: ${WEB_IMAGE}
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
           envFrom:

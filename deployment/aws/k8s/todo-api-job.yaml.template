@@ -7,10 +7,10 @@ spec:
     spec:
       containers:
         - name: todo-api-job-container
-          image: todo-api-job
-          imagePullPolicy: Never
+          image: $JOB_IMAGE
+          imagePullPolicy: IfNotPresent
           command: ["/bin/sh", "-c"]
-          args: ["/opt/venv/bin/python ARGS_PLACEHOLDER"]
+          args: ["/opt/venv/bin/python $JOB_ARGS"]
           envFrom:
             - configMapRef:
                 name: todo-api-config
