@@ -16,3 +16,4 @@ spec:
                 name: todo-api-config
             - secretRef:
                 name: todo-api-secret
+      restartPolicy: Never
