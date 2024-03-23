@@ -9,7 +9,7 @@ Example application created to demonstrate full adherence to `The Twelve-Factor 
 - **declarative format for setup automation** - achieved with `ansible`
 - **clean contract with underlying system** - only `unix-like` system is needed, for windows use WSL2.
 - **suitable for deployment on modern cloud platforms** - achieved with `kubernetes`
-- TODO: no dev/prod deployment yet **Minimize divergence** between development and production - local / dev / prod environments differs mostly just by configuration settings
+- **Minimize divergence** between development and production - local / dev / prod environments differs mostly just by configuration settings.
 - TODO: can **scale up** - achieved with `kubernetes` and autoscalling cloud capabilities.
 
 ### I. Codebase - One codebase tracked in revision control, many deploys
@@ -117,7 +117,7 @@ achieved with `kubernetes job` and `django manage.py <command>`
    - in your IDE
    - in your shell: `cd todo-api && poetry shell`
 
-4. Access todo-api service: `http://localhost:30000`
+4. Access todo-api service: `http://localhost:30000/api/docs`
 
 ## Admin processes
 
