@@ -28,13 +28,25 @@ docker push $JOB_IMAGE
 
 cd deployment/aws
 
+aws eks \
+    --profile $PROFILE \
+    --region $(cd 2.cluster.tf && terraform output -raw region) update-kubeconfig \
+    --name $(cd 2.cluster.tf && terraform output -raw cluster_name)
+
 kubectl apply -f k8s/12factor-namespace.yaml
 kubectl config set-context --current --namespace=12factor
+
+kubectl delete configmap todo-api-config --ignore-not-found=true
 kubectl create configmap todo-api-config --from-env-file=cloud.env
+
+kubectl delete secret todo-api-secret --ignore-not-found=true
 kubectl create secret generic todo-api-secret --from-env-file=cloud.secret.env
+
 envsubst < k8s/todo-api-web-deployment.yaml.template | kubectl apply -f -
 
 export JOB_ARGS="src/manage.py migrate"
+
+kubectl delete job todo-api-job --ignore-not-found=true
 envsubst < k8s/todo-api-job.yaml.template | kubectl apply -f -
 
 kubectl apply -f k8s/todo-api-web-service.yaml

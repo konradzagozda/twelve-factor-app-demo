@@ -1,5 +1,5 @@
 #!/bin/bash
-# usage: ./after-apply.sh
+# usage: ./1.update-params.sh
 set -x
 
 REGION=$(terraform -chdir=2.cluster.tf output -raw region)

@@ -9,7 +9,7 @@ Example application created to demonstrate full adherence to `The Twelve-Factor 
 - **declarative format for setup automation** - achieved with `ansible`
 - **clean contract with underlying system** - only `unix-like` system is needed, for windows use WSL2.
 - **suitable for deployment on modern cloud platforms** - achieved with `kubernetes`
-- **Minimize divergence** between development and production - local / dev / prod environments differs mostly just by configuration settings.
+- **Minimize divergence** between development and production - local / dev / prod environments differs mostly just by configuration settings. Local deployment achieved using `kind`, cloud deployments achieved with `aws eks`.
 - TODO: can **scale up** - achieved with `kubernetes` and autoscalling cloud capabilities.
 
 ### I. Codebase - One codebase tracked in revision control, many deploys
@@ -146,3 +146,30 @@ docker run -it --mount type=bind,source=/var/run/docker.sock,target=/var/run/doc
    --network host \
    ubuntu-test sh -c "cd $(pwd) && ansible-playbook setup.ansible.yaml"
 ```
+
+## Deployment
+
+### Requirements
+
+- AWS account for each environment (dev / prod) with configured profile in you `~/.aws/config` and `~/.aws/credentials`
+
+`cd deployment/aws`
+
+### Day 1
+
+Instruction for creating single environment, repeat those for dev and prod
+
+1. `cd 1.config.tf && terraform init && terraform workspace new <dev/prod> && terraform apply -var "profile=<profile>"`
+2. `cd ../2.cluster.tf && terraform init && terraform workspace new <dev/prod> && terraform apply -var "profile=<profile>"`
+3. `cd .. && ./1.update-params.sh`
+4. `./2.create-env-file.sh && ./3.create-env-secret-file.sh`
+5. `./4.deploy.sh 0.0.1`
+
+### Day N
+
+1. `terraform -chdir=1.config.tf workspace select <ENV> && terraform -chdir=2.cluster.tf workspace select <ENV>`
+2. `./4.deploy.sh 0.0.2`
+
+### Useful Commands
+
+`kubectl get services` - find domain name of load balancer to access your service
