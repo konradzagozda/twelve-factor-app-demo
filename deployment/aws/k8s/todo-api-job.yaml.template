@@ -16,4 +16,12 @@ spec:
                 name: todo-api-config
             - secretRef:
                 name: todo-api-secret
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
       restartPolicy: Never
+  ttlSecondsAfterFinished: 60

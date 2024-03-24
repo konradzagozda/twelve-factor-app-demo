@@ -10,14 +10,14 @@ Example application created to demonstrate full adherence to `The Twelve-Factor 
 - **clean contract with underlying system** - only `unix-like` system is needed, for windows use WSL2.
 - **suitable for deployment on modern cloud platforms** - achieved with `kubernetes`
 - **Minimize divergence** between development and production - local / dev / prod environments differs mostly just by configuration settings. Local deployment achieved using `kind`, cloud deployments achieved with `aws eks`.
-- TODO: can **scale up** - achieved with `kubernetes` and autoscalling cloud capabilities.
+- can **scale up** - achieved with `aws fargate` and autoscalling cloud capabilities.
 
 ### I. Codebase - One codebase tracked in revision control, many deploys
 
 - tracked in a version control system - achieved with `git`
 - one-to-one correlation between the codebase and the app
 - one codebase per app, many deploys of the app
-- production site, one staging site, copy of the app running in local development environment
+- production site, one staging site, copy of the app running in local development environment - achieved with `kind`
 
 ### II. Dependencies - Explicitly declare and isolate dependencies
 
@@ -173,3 +173,5 @@ Instruction for creating single environment, repeat those for dev and prod
 ### Useful Commands
 
 `kubectl get services` - find domain name of load balancer to access your service
+`kubectl exec -it <pod> -n 12factor -- /bin/bash` - execute shell in a pod
+`kubectl logs <pod>` - show logs of a pod
