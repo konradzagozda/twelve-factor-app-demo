@@ -1,5 +1,6 @@
 resource "aws_secretsmanager_secret" "todo_api_db_password" {
   name = "/todo_api/DB_PASSWORD"
+  recovery_window_in_days = 0
 }
 
 resource "random_password" "todo_api_db_password" {
