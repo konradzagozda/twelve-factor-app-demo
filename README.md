@@ -106,6 +106,8 @@ achieved with `kubernetes job` and `django manage.py <command>`
    - ansible
    - yq
    - kubectl
+   - eksctl
+   - helm
    - vscode (recommended)
 
 2. Run automation playbook that will scaffold project for you:

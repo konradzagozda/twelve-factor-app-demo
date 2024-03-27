@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: todo-api-web-deployment
+  name: todo-api-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: todo-api
+      app.kubernetes.io/name: todo-api
   template:
     metadata:
       labels:
-        app: todo-api
+        app.kubernetes.io/name: todo-api
     spec:
       containers:
         - name: todo-api-container

@@ -38,3 +38,7 @@ output "account_id" {
 output "profile" {
   value = var.profile
 }
+
+output "vpc_id" {
+  value       = module.vpc.vpc_id
+}

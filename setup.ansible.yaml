@@ -137,9 +137,9 @@
 
     - name: Build docker image
       shell: |
-        before_build_image_id=$(docker images -q todo-api-web)
-        docker build -t todo-api-web todo-api/src
-        after_build_image_id=$(docker images -q todo-api-web)
+        before_build_image_id=$(docker images -q todo-api)
+        docker build -t todo-api todo-api/src
+        after_build_image_id=$(docker images -q todo-api)
         if [ "$before_build_image_id" != "$after_build_image_id" ]; then
           echo "Docker image was rebuilt"
         else
@@ -164,7 +164,7 @@
     - name: Ensure Docker images are present in kind
       shell: kind --name 12factor load docker-image {{ item }}
       loop:
-        - todo-api-web
+        - todo-api
         - todo-api-job
       register: kind_image_sync
       changed_when: "'not yet present' in kind_image_sync.stderr"
@@ -233,8 +233,8 @@
         - deployment/local/todo-api-db-volume-claim.yaml
         - deployment/local/todo-api-db-deployment.yaml
         - deployment/local/todo-api-db-service.yaml
-        - deployment/local/todo-api-web-deployment.yaml
-        - deployment/local/todo-api-web-service.yaml
+        - deployment/local/todo-api-deployment.yaml
+        - deployment/local/todo-api-service.yaml
       register: k8s_apply_result
 
     - name: Pause for 10 seconds
@@ -243,8 +243,8 @@
       changed_when: False
       when: k8s_apply_result.results | map(attribute='changed') | list | select | list | length > 0
 
-    - name: Restart todo-api-web-deployment
-      command: kubectl rollout restart deployment/todo-api-web-deployment
+    - name: Restart todo-api-deployment
+      command: kubectl rollout restart deployment/todo-api-deployment
       changed_when: True
 
     - name: Pause for 10 seconds

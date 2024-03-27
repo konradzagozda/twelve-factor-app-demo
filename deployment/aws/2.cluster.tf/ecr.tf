@@ -8,8 +8,8 @@ resource "aws_ecr_repository" "todo_api_job" {
   }
 }
 
-resource "aws_ecr_repository" "todo_api_web" {
-  name                 = "todo-api-web"
+resource "aws_ecr_repository" "todo_api" {
+  name                 = "todo-api"
   image_tag_mutability = "IMMUTABLE"
 
   force_delete = true

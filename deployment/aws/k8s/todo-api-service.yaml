@@ -3,9 +3,9 @@ kind: Service
 metadata:
   name: todo-api-service
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
-    app: todo-api
+    app.kubernetes.io/name: todo-api
   ports:
     - protocol: TCP
       port: 80

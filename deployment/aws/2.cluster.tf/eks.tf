@@ -60,17 +60,8 @@ module "eks" {
   cluster_endpoint_public_access = true
 
   fargate_profiles = {
-    default = {
-      name         = "fp-default"
-      subnet_ids   = module.vpc.private_subnets
-      selectors = [
-        {
-          namespace = "default"
-        }
-      ]
-    },
     factor12 = {
-      name         = "fp-12factor"
+      name         = "12factor"
       subnet_ids   = module.vpc.private_subnets
       selectors = [
         {
@@ -78,15 +69,12 @@ module "eks" {
         }
       ]
     },
-    coredns = { # needed if all the nodes are fargate type
-      name         = "CoreDNS"
+    coredns = {
+      name         = "kube-system"
       subnet_ids   = module.vpc.private_subnets
       selectors = [
         {
           namespace = "kube-system"
-          labels = {
-            k8s-app = "kube-dns"
-          }
         }
       ]
     }

@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: todo-api-web-deployment
+  name: todo-api-deployment
 spec:
   replicas: 1
   selector:
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: todo-api-container
-          image: todo-api-web
+          image: todo-api
           imagePullPolicy: Never
           ports:
             - containerPort: 80
