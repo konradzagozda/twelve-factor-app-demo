@@ -50,3 +50,6 @@ kubectl delete job todo-api-job --ignore-not-found=true
 envsubst < k8s/todo-api-job.yaml.template | kubectl apply -f -
 
 kubectl apply -f k8s/todo-api-service.yaml
+kubectl apply -f k8s/todo-api-ingress.yaml
+
+

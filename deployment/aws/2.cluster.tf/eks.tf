@@ -1,11 +1,4 @@
-# Filter out local zones, which are not currently supported 
-# with managed node groups
-data "aws_availability_zones" "available" {
-  filter {
-    name   = "opt-in-status"
-    values = ["opt-in-not-required"]
-  }
-}
+data "aws_availability_zones" "available" {}
 
 locals {
   cluster_name = "12factor-eks-${random_string.suffix.result}"
@@ -60,8 +53,17 @@ module "eks" {
   cluster_endpoint_public_access = true
 
   fargate_profiles = {
+    default = {
+      name         = "fp-default"
+      subnet_ids   = module.vpc.private_subnets
+      selectors = [
+        {
+          namespace = "default"
+        }
+      ]
+    },
     factor12 = {
-      name         = "12factor"
+      name         = "fp-12factor"
       subnet_ids   = module.vpc.private_subnets
       selectors = [
         {
@@ -70,7 +72,19 @@ module "eks" {
       ]
     },
     coredns = {
-      name         = "kube-system"
+      name         = "fp-coredns"
+      subnet_ids   = module.vpc.private_subnets
+      selectors = [
+        {
+          namespace = "kube-system"
+          labels = {
+            k8s-app = "kube-dns"
+          }
+        }
+      ]
+    }
+    kubesystem = {
+      name         = "fp-kube-system"
       subnet_ids   = module.vpc.private_subnets
       selectors = [
         {
