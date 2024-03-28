@@ -21,15 +21,15 @@ Example application created to demonstrate full adherence to `The Twelve-Factor 
 
 ### II. Dependencies - Explicitly declare and isolate dependencies
 
-- TODO: no reliance on implicit existence of system-wide packages - achieved with `venv`
+- no reliance on implicit existence of system-wide packages - achieved with `venv`
 - exact dependency declaration - achieved with `poetry.lock`
 - no reliance on the implicit existence of any system tools (at runtime) - achieved with `venv`
 
 ### III. Config - Store config in the environment
 
-- TODO: (cloud) strict separation of config from code - achieved with `environment variables`
+- strict separation of config from code - achieved with `environment variables`, `aws parameter store`, `aws secret manager`
 - codebase could be made open source at any moment, without compromising any credentials
-- TODO: no grouping (local/dev/prod), env vars, fully orthogonal to other env vars independently managed for each deploy
+- no grouping (local/dev/prod), env vars, fully orthogonal to other env vars independently managed for each deploy
 
 ### IV. Backing services - Treat backing services as attached resources
 
@@ -56,7 +56,7 @@ Deploy has 3 stages:
 ### VII. Port binding - Export services via port binding
 
 - The twelve-factor app is completely self-contained - achieved with `uvicorn` in dependency declaration
-- exports HTTP as a service by binding to a port - access it on `url:30000`
+- exports HTTP as a service by binding to a port
 
 ### VIII. Concurrency - Scale out via the process model
 
