@@ -161,13 +161,13 @@ docker run -it --mount type=bind,source=/var/run/docker.sock,target=/var/run/doc
 Instruction for creating single environment, repeat those for dev and prod
 
 1. `cd tf && terraform init && terraform workspace new <dev/prod> && terraform apply -var "profile=<profile>"`
-2. `cd .. && ./1.update-params.sh && ./2.create-env-file.sh && ./3.create-env-secret-file.sh`
-3. `./4.deploy.sh 0.0.1`
+2. `cd .. && ./1.post-apply.sh`
+3. `./2.deploy.sh 0.0.1`
 
 ### Day N
 
 1. `terraform -chdir=tf workspace select <ENV> && terraform -chdir=tf workspace select <ENV>`
-2. `./2.create-env-file.sh && ./3.create-env-secret-file.sh && ./4.deploy.sh 0.0.2`
+2. `./2.deploy.sh 0.0.2`
 
 ### Useful Commands
 

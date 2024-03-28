@@ -1,14 +1,21 @@
 #!/bin/bash
-# usage: ./deploy.sh TAG
+# usage: ./deploy.sh SEMVER
 set -x
 
-TAG=$1
+SEMVER=$1
+DATETIME=$(date "+%Y_%m_%d_%H_%M_%S")
+TAG="${SEMVER}-${DATETIME}"
 
 ACCOUNT_ID=$(terraform -chdir=tf output -raw account_id)
 REGION=$(terraform -chdir=tf output -raw region)
-PROFILE=$(terraform -chdir=tf output -raw profile)
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+export AWS_PROFILE=$(terraform -chdir=tf output -raw profile)
+export AWS_PAGER=""
 
-aws --profile ${PROFILE} ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com
+aws ssm put-parameter --name "/todo_api/TAG" --value "${TAG}" --type "String" --overwrite --region ${REGION}
+aws ssm put-parameter --name "/todo_api/BRANCH" --value "$(git rev-parse --abbrev-ref HEAD)" --type "String" --overwrite --region ${REGION}
+
+aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com
 
 # Build the Docker images
 cd ../..
@@ -29,12 +36,14 @@ docker push ${JOB_IMAGE}
 cd deployment/aws
 
 aws eks \
-    --profile ${PROFILE} \
     --region ${REGION} update-kubeconfig \
     --name $(cd tf && terraform output -raw cluster_name)
 
 kubectl apply -f k8s/namespace.yaml
 kubectl config set-context --current --namespace=todo-api
+
+./create-env-file.sh
+./create-env-secret-file.sh
 
 kubectl delete configmap todo-api-config --ignore-not-found=true
 kubectl create configmap todo-api-config --from-env-file=cloud.env
@@ -42,5 +51,5 @@ kubectl create configmap todo-api-config --from-env-file=cloud.env
 kubectl delete secret todo-api-secret --ignore-not-found=true
 kubectl create secret generic todo-api-secret --from-env-file=cloud.secret.env
 
-helm install todo-api ./chart --set images.api=${API_IMAGE} --set images.job=${JOB_IMAGE}
+helm upgrade --install todo-api ./chart --set images.api=${API_IMAGE} --set images.job=${JOB_IMAGE}
 

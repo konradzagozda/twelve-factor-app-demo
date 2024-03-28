@@ -12,6 +12,8 @@ PARAMS=(
     "/todo_api/DB_NAME"
     "/todo_api/DB_USER"
     "/todo_api/DB_HOST"
+    "/todo_api/TAG"
+    "/todo_api/BRANCH"
 )
 
 # Clear the file content before starting

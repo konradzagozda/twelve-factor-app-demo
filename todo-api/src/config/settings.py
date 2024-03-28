@@ -32,6 +32,8 @@ try:
     DB_USER = os.environ["DB_USER"]
     DB_PASSWORD = os.environ["DB_PASSWORD"]
     DB_HOST = os.environ["DB_HOST"]
+    TAG = os.environ["TAG"]
+    BRANCH = os.environ["BRANCH"]
 except KeyError as exc:
     raise MissingConfiguration(f"The {exc} environment variable is required.")
 
