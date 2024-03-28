@@ -106,7 +106,6 @@ achieved with `kubernetes job` and `django manage.py <command>`
    - ansible
    - yq
    - kubectl
-   - eksctl
    - helm
    - vscode (recommended)
 
@@ -161,19 +160,17 @@ docker run -it --mount type=bind,source=/var/run/docker.sock,target=/var/run/doc
 
 Instruction for creating single environment, repeat those for dev and prod
 
-1. `cd 1.config.tf && terraform init && terraform workspace new <dev/prod> && terraform apply -var "profile=<profile>"`
-2. `cd ../2.cluster.tf && terraform init && terraform workspace new <dev/prod> && terraform apply -var "profile=<profile>"`
-3. `cd .. && ./1.update-params.sh`
-4. `./2.create-env-file.sh && ./3.create-env-secret-file.sh`
-5. `./4.deploy.sh 0.0.1`
+1. `cd tf && terraform init && terraform workspace new <dev/prod> && terraform apply -var "profile=<profile>"`
+2. `cd .. && ./1.update-params.sh && ./2.create-env-file.sh && ./3.create-env-secret-file.sh`
+3. `./4.deploy.sh 0.0.1`
 
 ### Day N
 
-1. `terraform -chdir=1.config.tf workspace select <ENV> && terraform -chdir=2.cluster.tf workspace select <ENV>`
-2. `./4.deploy.sh 0.0.2`
+1. `terraform -chdir=tf workspace select <ENV> && terraform -chdir=tf workspace select <ENV>`
+2. `./2.create-env-file.sh && ./3.create-env-secret-file.sh && ./4.deploy.sh 0.0.2`
 
 ### Useful Commands
 
-`kubectl get services` - find domain name of load balancer to access your service
+`kubectl get -n todo-api ingress` - find domain name of load balancer to access your service
 `kubectl exec -it <pod> -n todo-api -- /bin/bash` - execute shell in a pod
 `kubectl logs <pod>` - show logs of a pod
