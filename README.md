@@ -99,7 +99,7 @@ achieved with `kubernetes job` and `django manage.py <command>`
 
    - kind
    - docker
-   - poetry
+   - poetry 1.8.2+
    - pyenv
    - python3.11 (pyenv install 3.11.8; pyenv global 3.11.8)
    - git

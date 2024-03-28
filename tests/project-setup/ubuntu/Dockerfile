@@ -61,7 +61,7 @@ RUN pyenv install 3.11.8 && \
     pyenv rehash
 
 # Install poetry
-ENV POETRY_VERSION=1.6.1
+ENV POETRY_VERSION=1.8.2
 RUN curl -sSL https://install.python-poetry.org | python3 -
 ENV PATH $HOME/.local/bin:$PATH
 
