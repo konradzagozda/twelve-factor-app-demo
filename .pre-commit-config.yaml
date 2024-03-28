@@ -46,3 +46,11 @@ repos:
         require_serial: true
         types_or: [python, pyi]
         pass_filenames: false
+
+      - id: terraform_fmt
+        name: terraform_fmt
+        entry: terraform fmt
+        language: system
+        types: [terraform]
+        args: ["-recursive"]
+        files: ^deployment/aws/tf/
