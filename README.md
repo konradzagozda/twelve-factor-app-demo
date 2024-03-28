@@ -1,4 +1,4 @@
-# 12factor app demo
+# XII Factor Application Demo
 
 ## Description
 
@@ -44,7 +44,7 @@ Deploy has 3 stages:
 2. release - combines build with config, ready for immediate execution
 3. run(runtime) - runs the app in execution environment
 
-- Every release have unique release ID in format: `2011-04-06-20:32:17`
+- Every release have unique release ID in format: `major.minor.patch`
 - Release cannot be mutated once created.
 - Builds are initiated on push to main branch.
 

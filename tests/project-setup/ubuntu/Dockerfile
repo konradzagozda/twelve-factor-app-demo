@@ -41,7 +41,6 @@ RUN if [ "$(uname -m)" = "x86_64" ]; then \
     mv ./kind /usr/local/bin/kind
 
 # Install yq
-
 RUN wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 && \
     chmod a+x /usr/local/bin/yq && \
     yq --version
