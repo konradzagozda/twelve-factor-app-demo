@@ -1,0 +1,17 @@
+namespace:
+  name: "todo-api"
+
+images:
+  api: "todo-api"
+  job: "todo-api-job"
+
+job:
+  args: "src/manage.py migrate"
+
+resources:
+  requests:
+    cpu: "250m"
+    memory: "256Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"

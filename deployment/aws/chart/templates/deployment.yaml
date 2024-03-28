@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-api-deployment
+  namespace: {{ .Values.namespace.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: todo-api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: todo-api
+    spec:
+      containers:
+      - name: todo-api
+        image: "{{ .Values.images.api }}"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        envFrom:
+        - configMapRef:
+            name: todo-api-config
+        - secretRef:
+            name: todo-api-secret
+        args:
+        - "-m"
+        - "uvicorn"
+        - "--host"
+        - "0.0.0.0"
+        - "--port"
+        - "80"
+        - "config.asgi:application"
+        resources:
+          requests:
+            cpu: {{ .Values.resources.requests.cpu }}
+            memory: {{ .Values.resources.requests.memory }}
+          limits:
+            cpu: {{ .Values.resources.limits.cpu }}
+            memory: {{ .Values.resources.limits.memory }}

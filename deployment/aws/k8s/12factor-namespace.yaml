@@ -1,6 +1,0 @@
-kind: Namespace
-apiVersion: v1
-metadata:
-  name: 12factor
-  labels:
-    name: 12factor

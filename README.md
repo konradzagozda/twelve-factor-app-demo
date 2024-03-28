@@ -175,5 +175,5 @@ Instruction for creating single environment, repeat those for dev and prod
 ### Useful Commands
 
 `kubectl get services` - find domain name of load balancer to access your service
-`kubectl exec -it <pod> -n 12factor -- /bin/bash` - execute shell in a pod
+`kubectl exec -it <pod> -n todo-api -- /bin/bash` - execute shell in a pod
 `kubectl logs <pod>` - show logs of a pod

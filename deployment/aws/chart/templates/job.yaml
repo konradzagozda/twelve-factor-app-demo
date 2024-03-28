@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "todo-api-job-{{ now | date "20060102150405" }}"
+  namespace: {{ .Values.namespace.name }}
+spec:
+  template:
+    spec:
+      containers:
+      - name: todo-api-job
+        image: "{{ .Values.images.job }}"
+        imagePullPolicy: IfNotPresent
+        command: ["/bin/sh", "-c"]
+        args: ["/opt/venv/bin/python {{ .Values.job.args }}"]
+        envFrom:
+        - configMapRef:
+            name: todo-api-config
+        - secretRef:
+            name: todo-api-secret
+        resources:
+          requests:
+            cpu: {{ .Values.resources.requests.cpu }}
+            memory: {{ .Values.resources.requests.memory }}
+          limits:
+            cpu: {{ .Values.resources.limits.cpu }}
+            memory: {{ .Values.resources.limits.memory }}
+      restartPolicy: Never
+  ttlSecondsAfterFinished: 60

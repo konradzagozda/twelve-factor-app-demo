@@ -172,13 +172,13 @@
     - name: Apply namespace configuration
       k8s:
         state: present
-        src: deployment/local/12factor-namespace.yaml
+        src: deployment/local/namespace.yaml
 
     - name: Set current namespace context
       shell: |
         current=$(kubectl config view --minify --output 'jsonpath={..namespace}')
-        if [ "$current" != "12factor" ]; then
-          kubectl config set-context --current --namespace=12factor
+        if [ "$current" != "todo-api" ]; then
+          kubectl config set-context --current --namespace=todo-api
           echo "namespace changed"
         else
           echo "no change"
@@ -227,7 +227,7 @@
     - name: Apply Kubernetes configurations
       k8s:
         state: present
-        namespace: 12factor
+        namespace: todo-api
         src: "{{ item }}"
       loop:
         - deployment/local/todo-api-db-volume-claim.yaml

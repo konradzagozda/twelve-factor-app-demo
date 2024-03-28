@@ -1,6 +1,6 @@
 kind: Namespace
 apiVersion: v1
 metadata:
-  name: 12factor
+  name: todo-api
   labels:
-    name: 12factor
+    name: todo-api

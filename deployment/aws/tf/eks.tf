@@ -1,5 +1,3 @@
-data "aws_availability_zones" "available" {}
-
 locals {
   cluster_name = "12factor-eks-${random_string.suffix.result}"
 }
@@ -18,13 +16,13 @@ module "vpc" {
   cidr = "10.0.0.0/16"
   azs  = slice(data.aws_availability_zones.available.names, 0, 3)
 
-  
+
   private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
   public_subnets  = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
 
-  database_subnets = ["10.0.7.0/24", "10.0.8.0/24", "10.0.9.0/24"]
-  database_subnet_group_name = "subnet-group"
-  create_database_subnet_group  = true
+  database_subnets             = ["10.0.7.0/24", "10.0.8.0/24", "10.0.9.0/24"]
+  database_subnet_group_name   = "subnet-group"
+  create_database_subnet_group = true
 
   enable_nat_gateway   = true
   single_nat_gateway   = true
@@ -48,32 +46,32 @@ module "eks" {
   cluster_name    = local.cluster_name
   cluster_version = "1.27"
 
-  vpc_id          = module.vpc.vpc_id
-  subnet_ids      = module.vpc.private_subnets
+  vpc_id                         = module.vpc.vpc_id
+  subnet_ids                     = module.vpc.private_subnets
   cluster_endpoint_public_access = true
 
   fargate_profiles = {
     default = {
-      name         = "fp-default"
-      subnet_ids   = module.vpc.private_subnets
+      name       = "fp-default"
+      subnet_ids = module.vpc.private_subnets
       selectors = [
         {
           namespace = "default"
         }
       ]
     },
-    factor12 = {
-      name         = "fp-12factor"
-      subnet_ids   = module.vpc.private_subnets
+    todo_api = {
+      name       = "fp-todo-api"
+      subnet_ids = module.vpc.private_subnets
       selectors = [
         {
-          namespace = "12factor"
+          namespace = "todo-api"
         }
       ]
     },
     coredns = {
-      name         = "fp-coredns"
-      subnet_ids   = module.vpc.private_subnets
+      name       = "fp-coredns"
+      subnet_ids = module.vpc.private_subnets
       selectors = [
         {
           namespace = "kube-system"
@@ -84,8 +82,8 @@ module "eks" {
       ]
     }
     kubesystem = {
-      name         = "fp-kube-system"
-      subnet_ids   = module.vpc.private_subnets
+      name       = "fp-kube-system"
+      subnet_ids = module.vpc.private_subnets
       selectors = [
         {
           namespace = "kube-system"

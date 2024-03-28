@@ -40,10 +40,9 @@ resource "aws_ssm_parameter" "db_user" {
 }
 
 resource "aws_ssm_parameter" "db_host" {
-  name        = "/todo_api/DB_HOST"
-  type        = "String"
-  value       = "PLACEHOLDER"
-  description = "update this once you have host available"
+  name  = "/todo_api/DB_HOST"
+  type  = "String"
+  value = aws_db_instance.todo_api_db.address
 
   lifecycle {
     ignore_changes = [value]
