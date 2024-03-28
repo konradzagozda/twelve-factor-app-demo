@@ -34,6 +34,7 @@ try:
     DB_HOST = os.environ["DB_HOST"]
     TAG = os.environ["TAG"]
     BRANCH = os.environ["BRANCH"]
+    COMMIT = os.environ["COMMIT"]
 except KeyError as exc:
     raise MissingConfiguration(f"The {exc} environment variable is required.")
 

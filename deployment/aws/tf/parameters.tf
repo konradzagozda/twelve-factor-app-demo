@@ -68,3 +68,13 @@ resource "aws_ssm_parameter" "branch" {
     ignore_changes = [value]
   }
 }
+
+resource "aws_ssm_parameter" "commit" {
+  name  = "/todo_api/COMMIT"
+  type  = "String"
+  value = "current" # placeholder, managed by deployment script
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
