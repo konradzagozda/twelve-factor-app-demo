@@ -53,4 +53,4 @@ repos:
         language: system
         types: [terraform]
         args: ["-recursive"]
-        files: ^deployment/aws/tf/
+        files: ^deployment/aws/

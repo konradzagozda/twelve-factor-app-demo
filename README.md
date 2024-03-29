@@ -152,21 +152,33 @@ docker run -it --mount type=bind,source=/var/run/docker.sock,target=/var/run/doc
 
 ### Requirements
 
-- AWS account for each environment (dev / prod) with configured profile in you `~/.aws/config` and `~/.aws/credentials`
+- AWS account for each environment (dev / prod) and for common resources with configured profiles in your `~/.aws/config` and `~/.aws/credentials`
 
 `cd deployment/aws`
 
 ### Day 1
 
-Instruction for creating single environment, repeat those for dev and prod
+#### Common Infrastructure
 
-1. `cd tf && terraform init && terraform workspace new <dev/prod> && terraform apply -var "profile=<profile>"`
+1. `cd 1.shares-services.tf`
+2. create var file called `default.auto.tfvars`, fill it with variables (`variables.tf`)
+3. `terraform init && terraform apply`
+
+#### Workload Infrastructure
+
+1. `cd 2.main.tf`
+2. create two var files called `dev.auto.tfvars` and `prod.auto.tfvars`, fill it with variables (`variables.tf`)
+3. `terraform init`
+
+Repeat these commands for `dev` and `prod`:
+
+1. `terraform workspace new <dev/prod> && terraform apply -var-file <dev/prod>.tfvars`
 2. `cd .. && ./1.post-apply.sh`
 3. `./2.deploy.sh 0.0.1`
 
 ### Day N
 
-1. `terraform -chdir=tf workspace select <ENV> && terraform -chdir=tf workspace select <ENV>`
+1. `terraform -chdir=2.main.tf workspace select <dev/prod>`
 2. `./2.deploy.sh 0.0.2`
 
 ### Useful Commands

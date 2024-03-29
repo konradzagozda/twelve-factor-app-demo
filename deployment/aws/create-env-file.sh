@@ -1,7 +1,7 @@
 #!/bin/bash
 # usage: ./2.create-env-file.sh
 
-PROFILE=$(terraform -chdir=tf output -raw profile)
+PROFILE=$(terraform -chdir=2.main.tf output -raw profile)
 # Output .env file
 ENV_FILE="cloud.env"
 

@@ -3,14 +3,14 @@
 set -x
 
 
-export AWS_PROFILE=$(terraform -chdir=tf output -raw profile)
-CLUSTER_NAME=$(terraform -chdir=tf output -raw cluster_name)
-ACCOUNT_ID=$(terraform -chdir=tf output -raw account_id)
-VPC_ID=$(terraform -chdir=tf output -raw vpc_id)
+export AWS_PROFILE=$(terraform -chdir=2.main.tf output -raw profile)
+CLUSTER_NAME=$(terraform -chdir=2.main.tf output -raw cluster_name)
+ACCOUNT_ID=$(terraform -chdir=2.main.tf output -raw account_id)
+VPC_ID=$(terraform -chdir=2.main.tf output -raw vpc_id)
 
 aws eks \
-    --region $(cd tf && terraform output -raw region) update-kubeconfig \
-    --name $(cd tf && terraform output -raw cluster_name)
+    --region $(cd 2.main.tf && terraform output -raw region) update-kubeconfig \
+    --name $(cd 2.main.tf && terraform output -raw cluster_name)
 
 kubectl create sa aws-load-balancer-controller -n kube-system
 kubectl annotate sa aws-load-balancer-controller -n kube-system "eks.amazonaws.com/role-arn=arn:aws:iam::${ACCOUNT_ID}:role/AmazonEKSLoadBalancerControllerRole"
