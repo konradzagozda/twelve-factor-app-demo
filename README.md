@@ -129,12 +129,17 @@ achieved with `kubernetes job` and `django manage.py <command>`
 
 ## Tech Stack
 
-- backend:
-  - django, django-ninja,
-  - pytest, pytest-django,
-  - uvicorn
+### Application
+
+- django, django-ninja
+- pytest, pytest-django
+- uvicorn
+
+### Infrastructure
+
 - kubernetes
 - ansible
+- terraform
 
 ## Setup automation tests
 
@@ -148,7 +153,7 @@ docker run -it --mount type=bind,source=/var/run/docker.sock,target=/var/run/doc
    ubuntu-test sh -c "cd $(pwd) && ansible-playbook setup.ansible.yaml"
 ```
 
-## Deployment
+## Cloud Infrastructure
 
 ### Requirements
 
@@ -174,15 +179,30 @@ Repeat these commands for `dev` and `prod`:
 
 1. `terraform workspace new <dev/prod> && terraform apply -var-file <dev/prod>.tfvars`
 2. `cd .. && ./1.post-apply.sh`
-3. `./2.deploy.sh 0.0.1`
 
-### Day N
+### Day N | Deployment
 
-1. `terraform -chdir=2.main.tf workspace select <dev/prod>`
-2. `./2.deploy.sh 0.0.2`
+Deployment is split into 3 processes: `build`, `create release`, `deploy`
 
-### Useful Commands
+#### Build
 
-`kubectl get -n todo-api ingress` - find domain name of load balancer to access your service
-`kubectl exec -it <pod> -n todo-api -- /bin/bash` - execute shell in a pod
-`kubectl logs <pod>` - show logs of a pod
+Use `dev` environment for building:
+
+1. `terraform -chdir=2.main.tf workspace select dev`
+2. `./2.build.sh 0.0.1`
+
+#### Release
+
+Release is a pair of (`TAG`, `CONFIG`).
+TAG is used to select docker images uploaded in build step to ECR.
+CONFIG is set of environment files created in this stage and uploaded to CONFIG bucket.
+Releases info is stores in a seperate bucket in a way, that when you have a `TAG` you can deploy it immediately.
+**Release is environment specific, you must create release per environment** since configurations are often environmental.
+
+1. `./create-release.sh` - it will fetch latest build, create and upload a release
+
+#### Deployment
+
+Fetches necessary info from release bucket and deploys application to the cluster.
+
+1. `./4.deploy.sh 0.0.1-2024_03_30_10_10_21`
