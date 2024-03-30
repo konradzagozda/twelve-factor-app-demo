@@ -48,3 +48,13 @@ resource "aws_ssm_parameter" "db_host" {
     ignore_changes = [value]
   }
 }
+
+resource "aws_ssm_parameter" "db_port" {
+  name  = "/todo_api/DB_PORT"
+  type  = "String"
+  value = "5432"
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+}

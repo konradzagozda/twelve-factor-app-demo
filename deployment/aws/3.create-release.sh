@@ -20,7 +20,7 @@ SECRET_ENV_FILE_URL="s3://${CONFIGURATIONS_BUCKET}/todo-api/${TAG}/.secret.env"
 aws s3 cp "${ENV_FILE}" "${ENV_FILE_URL}" --region ${REGION}
 aws s3 cp "${SECRET_ENV_FILE}" "${SECRET_ENV_FILE_URL}" --region ${REGION}
 
-RELEASE_FILE="./${TAG}.json"
+RELEASE_FILE="./release-info.json"
 echo "{\"envFile\":\"${ENV_FILE_URL}\",\"secretEnvFile\":\"${SECRET_ENV_FILE_URL}\"}" > ${RELEASE_FILE}
 
 RELEASES_BUCKET=$(terraform -chdir=2.main.tf output -raw releases_bucket_name)

@@ -22,9 +22,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-l(7dip%l0*^nw!z2n&at@15u=4t=&ng)tlbm4xwr8-(-5!_j@k"
-
 try:
     DEBUG = os.environ["DEBUG"] == "True"
     ALLOWED_HOSTS = os.environ["ALLOWED_HOSTS"].split(",")
@@ -32,9 +29,11 @@ try:
     DB_USER = os.environ["DB_USER"]
     DB_PASSWORD = os.environ["DB_PASSWORD"]
     DB_HOST = os.environ["DB_HOST"]
+    DB_PORT = os.environ["DB_PORT"]
     TAG = os.environ["TAG"]
     BRANCH = os.environ["BRANCH"]
     COMMIT = os.environ["COMMIT"]
+    SECRET_KEY = os.environ["SECRET_KEY"]
 except KeyError as exc:
     raise MissingConfiguration(f"The {exc} environment variable is required.")
 
@@ -61,7 +60,7 @@ DATABASES = {
         "USER": DB_USER,
         "PASSWORD": DB_PASSWORD,
         "HOST": DB_HOST,
-        "PORT": 5432,
+        "PORT": DB_PORT,
     }
 }
 

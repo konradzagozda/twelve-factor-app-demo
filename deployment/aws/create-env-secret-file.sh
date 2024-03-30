@@ -8,6 +8,7 @@ ENV_FILE="cloud.secret.env"
 # Parameters to fetch from SSM
 SECRETS=(
     "/todo_api/DB_PASSWORD"
+    "/todo_api/SECRET_KEY"
 )
 
 # Clear the file content before starting

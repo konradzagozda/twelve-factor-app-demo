@@ -12,6 +12,7 @@ PARAMS=(
     "/todo_api/DB_NAME"
     "/todo_api/DB_USER"
     "/todo_api/DB_HOST"
+    "/todo_api/DB_PORT"
 )
 
 # Clear the file content before starting
