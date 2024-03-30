@@ -44,7 +44,7 @@ Deploy has 3 stages:
 2. release - combines build with config, ready for immediate execution
 3. run(runtime) - runs the app in execution environment
 
-- Every release have unique release ID in format: `major.minor.patch`
+- Every release have unique release ID in format: `major.minor.patch-datetime`
 - Release cannot be mutated once created.
 - Builds are initiated on push to main branch.
 
