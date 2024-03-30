@@ -1,5 +1,5 @@
 #!/bin/bash
-# usage: ./build.sh SEMVER
+# usage: ./2.build.sh SEMVER
 set -xe
 
 SEMVER=$1

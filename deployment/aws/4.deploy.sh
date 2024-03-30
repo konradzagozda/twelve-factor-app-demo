@@ -1,5 +1,5 @@
 #!/bin/bash
-# usage: ./deploy.sh TAG
+# usage: ./4.deploy.sh TAG
 set -ex
 
 TAG=$1

@@ -1,5 +1,5 @@
 #!/bin/bash
-# usage: ./create-release.sh
+# usage: ./3.create-release.sh
 set -xe
 
 export AWS_PROFILE=$(terraform -chdir=2.main.tf output -raw profile)
