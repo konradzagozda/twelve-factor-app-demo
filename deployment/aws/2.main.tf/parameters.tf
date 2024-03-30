@@ -48,33 +48,3 @@ resource "aws_ssm_parameter" "db_host" {
     ignore_changes = [value]
   }
 }
-
-resource "aws_ssm_parameter" "tag" {
-  name  = "/todo_api/TAG"
-  type  = "String"
-  value = "0.0.1" # placeholder, managed by deployment script
-
-  lifecycle {
-    ignore_changes = [value]
-  }
-}
-
-resource "aws_ssm_parameter" "branch" {
-  name  = "/todo_api/BRANCH"
-  type  = "String"
-  value = "main" # placeholder, managed by deployment script
-
-  lifecycle {
-    ignore_changes = [value]
-  }
-}
-
-resource "aws_ssm_parameter" "commit" {
-  name  = "/todo_api/COMMIT"
-  type  = "String"
-  value = "current" # placeholder, managed by deployment script
-
-  lifecycle {
-    ignore_changes = [value]
-  }
-}

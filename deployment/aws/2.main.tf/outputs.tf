@@ -42,3 +42,11 @@ output "oidc_provider_arn" {
 output "oidc_provider_url" {
   value = module.eks.oidc_provider
 }
+
+output "releases_bucket_name" {
+  value = aws_s3_bucket.releases.bucket
+}
+
+output "configurations_bucket_name" {
+  value = aws_s3_bucket.configurations.bucket
+}

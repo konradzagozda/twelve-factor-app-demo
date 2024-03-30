@@ -25,4 +25,4 @@ spec:
             cpu: {{ .Values.resources.limits.cpu }}
             memory: {{ .Values.resources.limits.memory }}
       restartPolicy: Never
-  ttlSecondsAfterFinished: 60
+  ttlSecondsAfterFinished: 3600

@@ -29,3 +29,5 @@ terraform.rc
 
 cloud.env
 cloud.secret.env
+.todo_api_last_build_tag
+release-info.json
