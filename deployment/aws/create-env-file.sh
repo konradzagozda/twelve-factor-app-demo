@@ -11,7 +11,8 @@ PARAMS=(
     "/todo_api/DEBUG"
     "/todo_api/DB_NAME"
     "/todo_api/DB_USER"
-    "/todo_api/DB_HOST"
+    "/todo_api/DB_WRITER_HOST"
+    "/todo_api/DB_READER_HOST"
     "/todo_api/DB_PORT"
 )
 

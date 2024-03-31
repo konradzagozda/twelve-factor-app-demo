@@ -21,7 +21,8 @@ resource "aws_secretsmanager_secret_version" "todo_api_db_password" {
 }
 
 resource "aws_secretsmanager_secret" "todo_api_secret_key" {
-  name = "/todo_api/SECRET_KEY"
+  name                    = "/todo_api/SECRET_KEY"
+  recovery_window_in_days = 0
 }
 
 resource "random_password" "todo_api_secret_key" {

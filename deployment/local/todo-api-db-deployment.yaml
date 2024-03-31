@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: public.ecr.aws/docker/library/postgres:15.6
+          image: public.ecr.aws/docker/library/postgres:15.4
           env:
             - name: POSTGRES_DB
               valueFrom:

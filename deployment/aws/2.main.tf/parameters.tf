@@ -39,10 +39,20 @@ resource "aws_ssm_parameter" "db_user" {
   }
 }
 
-resource "aws_ssm_parameter" "db_host" {
-  name  = "/todo_api/DB_HOST"
+resource "aws_ssm_parameter" "db_writer_host" {
+  name  = "/todo_api/DB_WRITER_HOST"
   type  = "String"
-  value = aws_db_instance.todo_api_db.address
+  value = module.aurora_postgresql_v2.cluster_endpoint
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
+
+resource "aws_ssm_parameter" "db_reader_host" {
+  name  = "/todo_api/DB_READER_HOST"
+  type  = "String"
+  value = module.aurora_postgresql_v2.cluster_reader_endpoint
 
   lifecycle {
     ignore_changes = [value]

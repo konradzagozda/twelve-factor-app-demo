@@ -18,9 +18,14 @@ output "cluster_name" {
   value       = module.eks.cluster_name
 }
 
-output "db_host" {
-  description = "The database host (address) for connecting to the database"
-  value       = aws_db_instance.todo_api_db.address
+output "db_writer_endpoint" {
+  description = "Writer endpoint for the cluster"
+  value       = module.aurora_postgresql_v2.cluster_endpoint
+}
+
+output "db_reader_endpoint" {
+  description = "A read-only endpoint for the cluster, automatically load-balanced across replicas"
+  value       = module.aurora_postgresql_v2.cluster_reader_endpoint
 }
 
 output "account_id" {

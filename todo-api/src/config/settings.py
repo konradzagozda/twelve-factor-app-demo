@@ -28,7 +28,8 @@ try:
     DB_NAME = os.environ["DB_NAME"]
     DB_USER = os.environ["DB_USER"]
     DB_PASSWORD = os.environ["DB_PASSWORD"]
-    DB_HOST = os.environ["DB_HOST"]
+    DB_WRITER_HOST = os.environ["DB_WRITER_HOST"]
+    DB_READER_HOST = os.environ["DB_READER_HOST"]
     DB_PORT = os.environ["DB_PORT"]
     TAG = os.environ["TAG"]
     BRANCH = os.environ["BRANCH"]
@@ -59,9 +60,17 @@ DATABASES = {
         "NAME": DB_NAME,
         "USER": DB_USER,
         "PASSWORD": DB_PASSWORD,
-        "HOST": DB_HOST,
+        "HOST": DB_WRITER_HOST,
         "PORT": DB_PORT,
-    }
+    },
+    "reader": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": DB_NAME,
+        "USER": DB_USER,
+        "PASSWORD": DB_PASSWORD,
+        "HOST": DB_READER_HOST,
+        "PORT": DB_PORT,
+    },
 }
 
 
