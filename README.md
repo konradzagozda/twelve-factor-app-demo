@@ -193,10 +193,10 @@ Use `dev` environment for building:
 
 #### Release
 
-Release is a pair of (`TAG`, `CONFIG`).
-TAG is used to select docker images uploaded in build step to ECR.
-CONFIG is set of environment files created in this stage and uploaded to CONFIG bucket.
-Releases info is stores in a seperate bucket in a way, that when you have a `TAG` you can deploy it immediately.
+Release is a pair of (`TAG`, `CONFIG`).  
+TAG is used to select docker images uploaded in build step to ECR.  
+CONFIG is set of environment files created in this stage and uploaded to CONFIG bucket.  
+Releases info is stored in a seperate bucket in a way, that when you have a `TAG` you can deploy it immediately.  
 **Release is environment specific, you must create release per environment** since configurations are often environmental.
 
 1. `./create-release.sh` - it will fetch latest build, create and upload a release
