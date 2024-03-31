@@ -36,7 +36,7 @@ Example application created to demonstrate full adherence to `The Twelve-Factor 
 - no distinction between local and third party services
 - attached resources (DB), accessed via a URL or other locator/credentials are stored in the config
 
-### TODO: V. Build, release, run - Strictly separate build and run stages
+### V. Build, release, run - Strictly separate build and run stages
 
 Deploy has 3 stages:
 
@@ -46,7 +46,7 @@ Deploy has 3 stages:
 
 - Every release have unique release ID in format: `major.minor.patch-datetime`
 - Release cannot be mutated once created.
-- Builds are initiated on push to main branch.
+- Builds are initiated on push to main branch. (TODO, manually triggered right now)
 
 ### VI. Processes - Execute the app as one or more stateless processes
 
