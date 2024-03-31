@@ -10,7 +10,7 @@ Example application created to demonstrate full adherence to `The Twelve-Factor 
 - **clean contract with underlying system** - only `unix-like` system is needed, for windows use WSL2.
 - **suitable for deployment on modern cloud platforms** - achieved with `kubernetes`
 - **Minimize divergence** between development and production - local / dev / prod environments differs mostly just by configuration settings. Local deployment achieved using `kind`, cloud deployments achieved with `aws eks`.
-- can **scale up** - achieved with `aws fargate` and autoscalling cloud capabilities.
+- can **scale up** - achieved with `aws fargate` and `horizontal pod autoscaler` (TODO)
 
 ### I. Codebase - One codebase tracked in revision control, many deploys
 

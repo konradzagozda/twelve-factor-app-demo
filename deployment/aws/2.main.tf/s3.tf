@@ -6,6 +6,7 @@ resource "random_pet" "bucket_suffix" {
 resource "aws_s3_bucket" "releases" {
   bucket              = "releases-${random_pet.bucket_suffix.id}"
   object_lock_enabled = true
+  force_destroy       = true
 }
 
 resource "aws_s3_bucket_versioning" "releases" {
@@ -29,6 +30,7 @@ resource "aws_s3_bucket_object_lock_configuration" "releases" {
 resource "aws_s3_bucket" "configurations" {
   bucket              = "configurations-${random_pet.bucket_suffix.id}"
   object_lock_enabled = true
+  force_destroy       = true
 }
 
 
