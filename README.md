@@ -10,7 +10,7 @@ Example application created to demonstrate full adherence to `The Twelve-Factor 
 - **clean contract with underlying system** - only `unix-like` system is needed, for windows use WSL2.
 - **suitable for deployment on modern cloud platforms** - achieved with `kubernetes`
 - **Minimize divergence** between development and production - local / dev / prod environments differs mostly just by configuration settings. Local deployment achieved using `kind`, cloud deployments achieved with `aws eks`.
-- can **scale up** - achieved with `aws fargate` and `horizontal pod autoscaler` (TODO)
+- can **scale up** - achieved with `aws fargate` (TODO: horizontal pod autoscaler)
 
 ### I. Codebase - One codebase tracked in revision control, many deploys
 
@@ -46,7 +46,7 @@ Deploy has 3 stages:
 
 - Every release have unique release ID in format: `major.minor.patch-datetime`
 - Release cannot be mutated once created.
-- Builds are initiated on push to main branch. (TODO, manually triggered right now)
+- Builds are initiated on push to main branch. (TODO: CI/CD system)
 
 ### VI. Processes - Execute the app as one or more stateless processes
 
@@ -83,7 +83,7 @@ Deploy has 3 stages:
 
 - app never concerns itself with routing or storage of its output stream
 - writes its event stream, unbuffered, to `stdout`
-- TODO: each process’ stream is captured in execution environment, collated together with all other streams from the app, and routed to final destinations for viewing and long-term archival
+- each process’ stream is captured in execution environment, collated together with all other streams from the app, and routed to final destinations for viewing and long-term archival (TODO: store logs)
 
 ### XII. Admin processes - Run admin/management tasks as one-off processes
 
