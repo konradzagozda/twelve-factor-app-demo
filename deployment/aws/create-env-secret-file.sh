@@ -1,5 +1,5 @@
 #!/bin/bash
-# usage: ./3.create-secret-file.sh
+# usage: ./create-secret-file.sh
 
 PROFILE=$(terraform -chdir=2.main.tf output -raw profile)
 # Output .env file

@@ -1,5 +1,5 @@
 #!/bin/bash
-# usage: ./2.create-env-file.sh
+# usage: ./create-env-file.sh
 
 PROFILE=$(terraform -chdir=2.main.tf output -raw profile)
 # Output .env file
