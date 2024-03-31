@@ -122,10 +122,10 @@ achieved with `kubernetes job` and `django manage.py <command>`
 
 ## Admin processes
 
-`./execute.sh -m pytest`
-`./execute.sh -m pytest -n 4`
-`./execute.sh src/manage.py migrate`
-`./execute.sh src/manage.py makemigrations`
+- `./execute.sh -m pytest`
+- `./execute.sh -m pytest -n 4`
+- `./execute.sh src/manage.py migrate`
+- `./execute.sh src/manage.py makemigrations`
 
 ## Tech Stack
 
