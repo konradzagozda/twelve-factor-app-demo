@@ -18,13 +18,13 @@ cd ../..
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
 COMMIT=$(git rev-parse HEAD)
 
-docker build --platform linux/amd64 \
+docker buildx build --platform linux/amd64 \
     --build-arg BRANCH="${BRANCH}" \
     --build-arg COMMIT="${COMMIT}" \
     --build-arg TAG="${TAG}" \
     -t todo-api todo-api/src
 
-docker build --platform linux/amd64 -t todo-api-job todo-api/tests
+docker buildx build --platform linux/amd64 -t todo-api-job todo-api/tests
 
 API_IMAGE=${SHARED_ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/todo-api:${TAG}
 JOB_IMAGE=${SHARED_ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/todo-api-job:${TAG}

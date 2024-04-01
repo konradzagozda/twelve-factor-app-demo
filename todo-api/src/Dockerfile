@@ -1,9 +1,5 @@
 FROM python:3.12-alpine
 
-ARG BRANCH="local"
-ARG COMMIT="local"
-ARG TAG="local"
-
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
@@ -19,7 +15,10 @@ RUN python -m venv /opt/venv && \
 
 COPY . ./
 
-LABEL "git.branch"="$BRANCH" "git.commit"="$COMMIT"
+ARG BRANCH="local"
+ARG COMMIT="local"
+ARG TAG="local"
+LABEL "git.branch"="$BRANCH" "git.commit"="$COMMIT" "release.tag"="$TAG"
 ENV BRANCH="$BRANCH" COMMIT="$COMMIT" TAG="$TAG"
 
 ENTRYPOINT ["/opt/venv/bin/python"]
