@@ -1,0 +1,7 @@
+# source: https://docs.aws.amazon.com/eks/latest/userguide/fargate-logging.html
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: aws-observability
+  labels:
+    aws-observability: enabled

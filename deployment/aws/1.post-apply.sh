@@ -12,6 +12,10 @@ aws eks \
     --region $(cd 2.main.tf && terraform output -raw region) update-kubeconfig \
     --name $(cd 2.main.tf && terraform output -raw cluster_name)
 
+
+kubectl apply -f k8s/aws-observability-namespace.yaml
+kubectl apply -f k8s/aws-logging-cloudwatch-configmap.yaml
+
 kubectl create sa aws-load-balancer-controller -n kube-system
 kubectl annotate sa aws-load-balancer-controller -n kube-system "eks.amazonaws.com/role-arn=arn:aws:iam::${ACCOUNT_ID}:role/AmazonEKSLoadBalancerControllerRole"
 

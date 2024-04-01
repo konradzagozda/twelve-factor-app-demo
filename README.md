@@ -83,7 +83,7 @@ Deploy has 3 stages:
 
 - app never concerns itself with routing or storage of its output stream
 - writes its event stream, unbuffered, to `stdout`
-- each process’ stream is captured in execution environment, collated together with all other streams from the app, and routed to final destinations for viewing and long-term archival (TODO: store logs)
+- each process’ stream is captured in execution environment, collated together with all other streams from the app, and routed to final destinations for viewing and long-term archival - logs are routed via `fluentbit` to `cloudwatch`
 
 ### XII. Admin processes - Run admin/management tasks as one-off processes
 

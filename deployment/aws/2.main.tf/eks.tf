@@ -60,6 +60,12 @@ module "eks" {
     }
   }
 
+  fargate_profile_defaults = {
+    iam_role_additional_policies = {
+      additional = aws_iam_policy.cloudwatch.arn
+    }
+  }
+
   fargate_profiles = {
     workloads = {
       name       = "fp-workloads"
@@ -79,8 +85,32 @@ module "eks" {
       selectors = [
         {
           namespace = "kube-system"
+        },
+        {
+          namespace = "aws-observability"
         }
       ]
     }
   }
+}
+
+resource "aws_iam_policy" "cloudwatch" {
+  name = "${local.cluster_name}-cloudwatch-access"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogStream",
+          "logs:CreateLogGroup",
+          "logs:DescribeLogStreams",
+          "logs:PutLogEvents",
+          "logs:PutRetentionPolicy"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
 }
