@@ -23,7 +23,7 @@
   gather_facts: no
   tasks:
     - name: Ensure python env with Poetry
-      command: poetry env use 3.11
+      command: poetry env use 3.12
       register: poetry_env_output
       args:
         chdir: todo-api

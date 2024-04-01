@@ -54,9 +54,9 @@ ENV HOME /home/root
 ENV PYENV_ROOT $HOME/.pyenv
 ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
 
-# Install python 3.11
-RUN pyenv install 3.11.8 && \
-    pyenv global 3.11.8 && \
+# Install python 3.12
+RUN pyenv install 3.12 && \
+    pyenv global 3.12 && \
     pyenv rehash
 
 # Install poetry

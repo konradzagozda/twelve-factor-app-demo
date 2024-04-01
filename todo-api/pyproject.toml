@@ -3,7 +3,7 @@ name = "12factor"
 package-mode = false
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.12"
 django-ninja = "^1.1.0"
 uvicorn = "^0.27.0"
 psycopg = "^3.1.17"

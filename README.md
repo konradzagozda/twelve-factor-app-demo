@@ -101,7 +101,7 @@ achieved with `kubernetes job` and `django manage.py <command>`
    - docker
    - poetry 1.8.2+
    - pyenv
-   - python3.11 (pyenv install 3.11.8; pyenv global 3.11.8)
+   - python3.12 (pyenv install 3.12; pyenv global 3.12)
    - git
    - ansible
    - yq
