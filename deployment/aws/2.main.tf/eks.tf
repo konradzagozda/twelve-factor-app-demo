@@ -41,48 +41,40 @@ module "vpc" {
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "19.15.3"
+  version = "19.21.0"
 
   cluster_name    = local.cluster_name
-  cluster_version = "1.27"
+  cluster_version = "1.29"
 
   vpc_id                         = module.vpc.vpc_id
   subnet_ids                     = module.vpc.private_subnets
   cluster_endpoint_public_access = true
 
+  cluster_addons = {
+    kube-proxy = {}
+    vpc-cni    = {}
+    coredns = {
+      configuration_values = jsonencode({
+        computeType = "Fargate"
+      })
+    }
+  }
+
   fargate_profiles = {
-    default = {
-      name       = "fp-default"
+    workloads = {
+      name       = "fp-workloads"
       subnet_ids = module.vpc.private_subnets
       selectors = [
+        {
+          namespace = "todo-api"
+        },
         {
           namespace = "default"
         }
       ]
     },
-    todo_api = {
-      name       = "fp-todo-api"
-      subnet_ids = module.vpc.private_subnets
-      selectors = [
-        {
-          namespace = "todo-api"
-        }
-      ]
-    },
-    coredns = {
-      name       = "fp-coredns"
-      subnet_ids = module.vpc.private_subnets
-      selectors = [
-        {
-          namespace = "kube-system"
-          labels = {
-            k8s-app = "kube-dns"
-          }
-        }
-      ]
-    }
-    kubesystem = {
-      name       = "fp-kube-system"
+    system = {
+      name       = "fp-system"
       subnet_ids = module.vpc.private_subnets
       selectors = [
         {

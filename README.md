@@ -172,7 +172,7 @@ docker run -it --mount type=bind,source=/var/run/docker.sock,target=/var/run/doc
 #### Workload Infrastructure
 
 1. `cd 2.main.tf`
-2. create two var files called `dev.auto.tfvars` and `prod.auto.tfvars`, fill it with variables (`variables.tf`)
+2. create two var files called `dev.tfvars` and `prod.tfvars`, fill it with variables (`variables.tf`)
 3. `terraform init`
 
 Repeat these commands for `dev` and `prod`:
